@@ -8,4 +8,67 @@
     <artifactId>library</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <packaging>jar</packaging>
+    <name>Library</name>
+    <developers>
+        <developer>
+            <name>Laszlo Vereb</name>
+            <email>Laszlo_Vereb@epam.com</email>
+        </developer>
+    </developers>
+
+    <properties>
+        <!--region maven-->
+        <maven.compiler.version>3.8.1</maven.compiler.version>
+        <java.version>11</java.version>
+        <!--endregion-->
+
+        <!--region dependencies-->
+        <spring.version>2.3.1.RELEASE</spring.version>
+        <!--endregion-->
+        <jetbrains.annotations.version>19.0.0</jetbrains.annotations.version>
+    </properties>
+
+
+    <dependencies>
+        <!--region implementation-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>${jetbrains.annotations.version}</version>
+        </dependency>
+        <!--endregion-->
+        <!--region test-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>${spring.version}</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!--endregion-->
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.version}</version>
+                <configuration>
+                    <release>${java.version}</release>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
