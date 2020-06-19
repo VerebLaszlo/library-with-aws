@@ -1,0 +1,50 @@
+package com.epam.library.controller;
+
+import com.epam.library.model.*;
+import com.epam.library.service.*;
+import com.epam.library.util.*;
+
+import org.junit.jupiter.api.*;
+
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.boot.test.autoconfigure.web.servlet.*;
+import org.springframework.boot.test.context.*;
+import org.springframework.boot.test.mock.mockito.*;
+import org.springframework.http.*;
+import org.springframework.test.web.servlet.*;
+
+import static com.epam.library.util.LibraryAssertions.then;
+import static org.mockito.BDDMockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+
+@SpringBootTest
+@AutoConfigureMockMvc
+@DisplayNameGeneration(CamelCaseDisplayNameGenerator.class)
+class GivenLibrary {
+    static final String BOOKS_REST_API = "/api/v1/books";
+
+    static final Book newBookStub = new Book("New Title", "New Author", "New Publisher", new Isbn("New ISBN"));
+
+    static final String INPUTTED_BOOK_JSON
+            = "{\"isbn\":{\"number\":\"ISBN\"},\"title\":\"Title\",\"author\":\"Author\",\"publisher\":\"Publisher\"}";
+    static final String EXPECTED_NEW_BOOK_JSON
+            = "{\"isbn\":{\"number\":\"New ISBN\"},\"title\":\"New Title\",\"author\":\"New Author\","
+              + "\"publisher\":\"New Publisher\"}";
+    @Autowired
+    protected MockMvc mvc;
+
+    @MockBean
+    protected BookService.BookRepository repository;
+
+    @Test
+    void listingBooks_should_returnInternalServerError_if_repositoryFails() throws Exception {
+        given(repository.getBooks())
+                .willThrow(RuntimeException.class);
+
+        var actual = mvc.perform(get(BOOKS_REST_API).contentType(MediaType.APPLICATION_JSON))
+                        .andReturn();
+
+        then(actual).hasInternalServerErrorStatus()
+                    .hasBody("");
+    }
+}

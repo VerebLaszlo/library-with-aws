@@ -7,15 +7,21 @@ import java.util.stream.*;
 
 public class CamelCaseDisplayNameGenerator extends DisplayNameGenerator.ReplaceUnderscores {
     @Override
-    public String generateDisplayNameForClass(Class<?> testClass) {
+    public final String generateDisplayNameForClass(Class<?> testClass) {
         return prependUppercaseWithSpace(super.generateDisplayNameForClass(testClass));
     }
 
     @Override
-    public String generateDisplayNameForMethod(Class<?> testClass, Method testMethod) {
+    public final String generateDisplayNameForNestedClass(Class<?> nestedClass) {
+        return prependUppercaseWithSpace(super.generateDisplayNameForNestedClass(nestedClass));
+    }
+
+    @Override
+    public final String generateDisplayNameForMethod(Class<?> testClass, Method testMethod) {
         return prependUppercaseWithSpace(super.generateDisplayNameForMethod(testClass, testMethod));
     }
 
+    //region helper functions
     private static String prependUppercaseWithSpace(String classDisplayName) {
         return IntStream.range(0, classDisplayName.length())
                         .mapToObj(i -> prependUppercaseWithSpace(classDisplayName, i))
@@ -52,4 +58,5 @@ public class CamelCaseDisplayNameGenerator extends DisplayNameGenerator.ReplaceU
     private static boolean isNotLastCharacter(CharSequence classDisplayName, int charIndex) {
         return charIndex < classDisplayName.length() - 1;
     }
+    //endregion
 }
