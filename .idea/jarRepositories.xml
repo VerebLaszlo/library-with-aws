@@ -16,5 +16,10 @@
       <option name="name" value="JBoss Community repository" />
       <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="dynamodblocal" />
+      <option name="name" value="AWS DynamoDB Local Release Repository" />
+      <option name="url" value="https://s3-us-west-2.amazonaws.com/dynamodb-local/release" />
+    </remote-repository>
   </component>
 </project>
