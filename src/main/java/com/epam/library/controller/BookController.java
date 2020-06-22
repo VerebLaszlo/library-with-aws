@@ -28,7 +28,7 @@ class BookController {
     @PostMapping
     public final ResponseEntity<Book> create(@RequestBody Book book) {
         try {
-            return ResponseEntity.ok(bookService.create(book));
+            return ResponseEntity.ok(bookService.save(book));
         } catch (IllegalArgumentException e) {
             LOG.error("Could not create book.", e);
             return ResponseEntity.badRequest().build();

@@ -29,7 +29,7 @@ class GivenLibraryWithoutBooks extends GivenLibrary {
 
     @Test
     void creatingABook_returnsInternalServerError_if_repositoryFails() throws Exception {
-        given(repository.create(any(Book.class)))
+        given(repository.save(any(Book.class)))
                 .willThrow(RuntimeException.class);
 
         var actual = mvc.perform(post(BOOKS_REST_API).contentType(MediaType.APPLICATION_JSON)
@@ -42,7 +42,7 @@ class GivenLibraryWithoutBooks extends GivenLibrary {
 
     @Test
     void creatingABook_returnsTheCreatedBook() throws Exception {
-        given(repository.create(any(Book.class)))
+        given(repository.save(any(Book.class)))
                 .willReturn(newBookStub);
 
         var actual = mvc.perform(post(BOOKS_REST_API).contentType(MediaType.APPLICATION_JSON)

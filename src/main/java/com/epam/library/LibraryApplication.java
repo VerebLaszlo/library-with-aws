@@ -6,6 +6,7 @@ import org.springframework.boot.*;
 import org.springframework.boot.autoconfigure.*;
 import org.springframework.context.*;
 
+@SuppressWarnings({"NonFinalUtilityClass", "UtilityClassCanBeEnum"})
 @SpringBootApplication
 class LibraryApplication {
     private static final Logger LOG = LoggerFactory.getLogger(LibraryApplication.class);

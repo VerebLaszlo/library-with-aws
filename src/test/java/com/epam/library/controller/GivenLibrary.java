@@ -28,7 +28,7 @@ class GivenLibrary {
     static final String INPUTTED_BOOK_JSON
             = "{\"isbn\":{\"number\":\"ISBN\"},\"title\":\"Title\",\"author\":\"Author\",\"publisher\":\"Publisher\"}";
     static final String EXPECTED_NEW_BOOK_JSON
-            = "{\"isbn\":{\"number\":\"New ISBN\"},\"title\":\"New Title\",\"author\":\"New Author\","
+            = "{\"id\":null,\"isbn\":{\"number\":\"New ISBN\"},\"title\":\"New Title\",\"author\":\"New Author\","
               + "\"publisher\":\"New Publisher\"}";
     @Autowired
     protected MockMvc mvc;

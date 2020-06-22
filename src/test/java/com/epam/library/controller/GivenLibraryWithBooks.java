@@ -14,10 +14,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 class GivenLibraryWithBooks extends GivenLibrary {
     private static final Book BOOK_STUB = new Book("Title", "Author", "Publisher", new Isbn("ISBN"));
-    private static final String BOOKS_IN_LIBRARY =
-            "[{\"isbn\":{\"number\":\"ISBN\"},\"title\":\"Title\",\"author\":\"Author\",\"publisher\":\"Publisher\"}"
-            + ",{\"isbn\":{\"number\":\"a\"},\"title\":\"Title\",\"author\":\"Author\",\"publisher\":\"Publisher\"}"
-            + ",{\"isbn\":{\"number\":\"b\"},\"title\":\"Title\",\"author\":\"Author\",\"publisher\":\"Publisher\"}]";
+    private static final String EXPECTED_BOOKS_IN_LIBRARY =
+            "[{\"id\":null,\"isbn\":{\"number\":\"ISBN\"},\"title\":\"Title\",\"author\":\"Author\","
+            + "\"publisher\":\"Publisher\"}"
+            + ",{\"id\":null,\"isbn\":{\"number\":\"a\"},\"title\":\"Title\",\"author\":\"Author\","
+            + "\"publisher\":\"Publisher\"}"
+            + ",{\"id\":null,\"isbn\":{\"number\":\"b\"},\"title\":\"Title\",\"author\":\"Author\","
+            + "\"publisher\":\"Publisher\"}]";
 
     @BeforeEach
     final void beforeEach() {
@@ -31,12 +34,12 @@ class GivenLibraryWithBooks extends GivenLibrary {
                         .andReturn();
 
         then(actual).hasOkStatus()
-                    .hasBody(BOOKS_IN_LIBRARY);
+                    .hasBody(EXPECTED_BOOKS_IN_LIBRARY);
     }
 
     @Test
     void creatingANewBook_should_returnTheCreatedBook() throws Exception {
-        given(repository.create(any(Book.class)))
+        given(repository.save(any(Book.class)))
                 .willReturn(newBookStub);
 
         var actual = mvc.perform(post(BOOKS_REST_API)
@@ -44,14 +47,14 @@ class GivenLibraryWithBooks extends GivenLibrary {
                                          .content(INPUTTED_BOOK_JSON))
                         .andReturn();
 
-        verify(repository).create(any(Book.class));
+        verify(repository).save(any(Book.class));
         then(actual).hasOkStatus()
                     .hasBody(EXPECTED_NEW_BOOK_JSON);
     }
 
     @Test
     void creatingABookAlreadyInLibrary_should_fail() throws Exception {
-        given(repository.create(any(Book.class)))
+        given(repository.save(any(Book.class)))
                 .willThrow(IllegalArgumentException.class);
 
         var actual = mvc.perform(post(BOOKS_REST_API)
@@ -59,14 +62,14 @@ class GivenLibraryWithBooks extends GivenLibrary {
                                          .content(INPUTTED_BOOK_JSON))
                         .andReturn();
 
-        verify(repository).create(any(Book.class));
+        verify(repository).save(any(Book.class));
         then(actual).hasBadRequestStatus()
                     .hasBody("");
     }
 
     //region helper functions
     static Book withIsbn(Book bookStub, String isbn) {
-        return bookStub.copyWithIsdn(new Isbn(isbn));
+        return new Book(bookStub.getTitle(), bookStub.getAuthor(), bookStub.getPublisher(), new Isbn(isbn));
     }
     //endregion
 }

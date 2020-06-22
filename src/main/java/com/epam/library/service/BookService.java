@@ -7,11 +7,11 @@ import java.util.*;
 public interface BookService {
     List<Book> getBooks();
 
-    Book create(Book book);
+    Book save(Book book);
 
     interface BookRepository {
         List<Book> getBooks();
 
-        Book create(Book book);
+        Book save(Book book);
     }
 }

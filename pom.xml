@@ -10,6 +10,7 @@
 
     <packaging>jar</packaging>
     <name>Library</name>
+    <description>Example project using Spring REST and AWS.</description>
     <developers>
         <developer>
             <name>Laszlo Vereb</name>
@@ -18,20 +19,50 @@
     </developers>
 
     <properties>
+        <test.extra.jvm.opts>-javaagent:${basedir}/target/jamm-${jamm.version}.jar</test.extra.jvm.opts>
+        <default.test.jvm.opts>-Xms256m -Xmx1280m -XX:+HeapDumpOnOutOfMemoryError -ea ${test.extra.jvm.opts}
+        </default.test.jvm.opts>
+        <mem.jvm.opts>-Xms256m -Xmx768m -ea -XX:+HeapDumpOnOutOfMemoryError ${test.extra.jvm.opts}</mem.jvm.opts>
+
         <!--region maven-->
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.version>3.8.1</maven.compiler.version>
         <java.version>11</java.version>
+        <maven.site.version>3.9.0</maven.site.version>
+        <maven.compiler.version>3.8.1</maven.compiler.version>
+        <maven.assembly.version>3.3.0</maven.assembly.version>
+        <maven.resources.version>3.1.0</maven.resources.version>
+        <maven.surefire.version>3.0.0-M5</maven.surefire.version>
+        <maven.dependency.version>3.1.2</maven.dependency.version>
+        <exec.maven.plugin.version>3.0.0</exec.maven.plugin.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!--endregion-->
+
+        <!--region application properties-->
+        <dynamodb-local.port>8000</dynamodb-local.port>
+        <dynamodb-local.endpoint>http://localhost:${dynamodb-local.port}</dynamodb-local.endpoint>
         <!--endregion-->
 
         <!--region dependencies-->
         <spring.version>2.3.1.RELEASE</spring.version>
         <jetbrains.annotations.version>19.0.0</jetbrains.annotations.version>
+        <sqlite4java.version>1.0.392</sqlite4java.version>
+        <aws.java.sdk.version>[1.11.89, 2.0.0)</aws.java.sdk.version>
         <!--endregion-->
-        <jetbrains.annotations.version>19.0.0</jetbrains.annotations.version>
+
+        <!--region test dependencies-->
+        <junit-jupiter-engine.version>5.6.2</junit-jupiter-engine.version>
+        <aws.dynamodblocal.version>[1.11.86,2.0)</aws.dynamodblocal.version>
+        <!--endregion-->
     </properties>
 
-
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.almworks.sqlite4java</groupId>
+                <artifactId>sqlite4java</artifactId>
+                <version>${sqlite4java.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
         <!--region implementation-->
         <dependency>
@@ -43,6 +74,11 @@
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
             <version>${jetbrains.annotations.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-dynamodb</artifactId>
+            <version>${aws.java.sdk.version}</version>
         </dependency>
         <!--endregion-->
         <!--region test-->
@@ -58,9 +94,20 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!--endregion-->
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>DynamoDBLocal</artifactId>
+            <version>${aws.dynamodblocal.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
-
+    <repositories>
+        <repository>
+            <id>dynamodblocal</id>
+            <name>AWS DynamoDB Local Release Repository</name>
+            <url>https://s3-us-west-2.amazonaws.com/dynamodb-local/release</url>
+        </repository>
+    </repositories>
     <build>
         <plugins>
             <plugin>
@@ -71,6 +118,126 @@
                     <release>${java.version}</release>
                 </configuration>
             </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven.surefire.version}</version>
+                <configuration>
+                    <argLine>-Dsqlite4java.library.path=${basedir}/target/dependencies</argLine>
+                    <includes>
+                        <include>**/*Test.java</include>
+                        <include>**/*Should.java</include>
+                        <include>**/Given*.java</include>
+                    </includes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+                <version>${maven.surefire.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>${maven.resources.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>${maven.site.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>${maven.dependency.version}</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>process-test-resources</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/dependencies</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+                <version>${maven.surefire.version}</version>
+            </plugin>
+        </plugins>
+    </reporting>
+    <profiles>
+        <profile>
+            <id>share</id>
+            <activation>
+                <file>
+                    <exists>src/assembly/component.xml</exists>
+                </file>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <version>${maven.assembly.version}</version>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>src/assembly/component.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>make-assembly</id> <!-- this is used for inheritance merges -->
+                                <phase>package</phase> <!-- bind to the packaging phase -->
+                                <goals>
+                                    <goal>single</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>start-dynamodb-local</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>${exec.maven.plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <phase>initialize</phase>
+                                <configuration>
+                                    <executable>java</executable>
+                                    <arguments>
+                                        <argument>-cp</argument>
+                                        <classpath/>
+                                        <argument>-Dsqlite4java.library.path=${basedir}/target/dependencies</argument>
+                                        <argument>com.amazonaws.services.dynamodbv2.local.main.ServerRunner</argument>
+                                        <argument>-inMemory</argument>
+                                        <argument>-port</argument>
+                                        <argument>${dynamodb-local.port}</argument>
+                                    </arguments>
+                                </configuration>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

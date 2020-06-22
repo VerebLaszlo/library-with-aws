@@ -1,29 +1,30 @@
 package com.epam.library.model;
 
+import org.jetbrains.annotations.*;
+
 import java.util.*;
 
 public class Book {
+    private final @Nullable String id;
     private final Isbn isbn;
     private final String title;
     private final String author;
     private final String publisher;
 
     private Book() {
-        isbn = new Isbn("");
-        title = "";
-        author = "";
-        publisher = "";
+        this("", "", "", new Isbn(""));
     }
 
     public Book(String title, String author, String publisher, Isbn isbn) {
+        this(title, author, publisher, isbn, null);
+    }
+
+    public Book(String title, String author, String publisher, Isbn isbn, @Nullable String id) {
         this.title = title;
         this.author = author;
         this.publisher = publisher;
         this.isbn = isbn;
-    }
-
-    public Book copyWithIsdn(Isbn newIsbn) {
-        return new Book(title, author, publisher, newIsbn);
+        this.id = id;
     }
 
     public String getTitle() {
@@ -40,6 +41,10 @@ public class Book {
 
     public Isbn getIsbn() {
         return isbn;
+    }
+
+    public Optional<@Nullable String> getId() {
+        return Optional.ofNullable(id);
     }
 
     @Override
@@ -60,6 +65,7 @@ public class Book {
 
     @Override
     public String toString() {
-        return String.format("Book{title='%s', author='%s', publisher='%s', isbn=%s}", title, author, publisher, isbn);
+        return String.format("Book{id='%s', isbn=%s, title='%s', author='%s', publisher='%s'}",
+                             id, isbn, title, author, publisher);
     }
 }
