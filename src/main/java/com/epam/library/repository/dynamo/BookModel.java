@@ -18,11 +18,11 @@ public class BookModel {
     private String publisher;
     private String isbn;
 
-    private BookModel() {
+    public BookModel() {
         this(null, "", "", "", "");
     }
 
-    BookModel(@Nullable String id, String title, String author, String publisher, String isbn) {
+    public BookModel(@Nullable String id, String title, String author, String publisher, String isbn) {
         this.id = id;
         this.title = title;
         this.author = author;

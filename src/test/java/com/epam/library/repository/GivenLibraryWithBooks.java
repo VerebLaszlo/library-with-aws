@@ -15,23 +15,23 @@ import static com.epam.library.util.LibraryAssertions.*;
 import static org.assertj.core.api.BDDAssumptions.*;
 
 @SpringBootTest
-@Import(LibraryConfiguration.class)
+@Import(LibraryWithBooksConfiguration.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @DisplayNameGeneration(CamelCaseDisplayNameGenerator.class)
-class GivenLibraryWithoutBooks {
+class GivenLibraryWithBooks {
     private static final Book BOOK_STUB = new Book("Title", "Author", "Publisher", new Isbn("Isdb"));
     @Autowired
     private BookRepository repository;
 
     @Test
-    void listingBooks_should_returnEmptyList() {
+    void listingBooks_should_returnBooks() {
         var result = repository.getBooks();
 
-        then(result).isEmpty();
+        then(result).hasSize(LibraryWithBooksConfiguration.NUMBER_OF_BOOKS);
     }
 
     @Test
-    void savingANewBook_should_returnTheCreatedBook() {
+    void savingABook_should_returnTheSavedBook() {
         given(BOOK_STUB.getId()).isEmpty();
 
         var result = repository.save(BOOK_STUB);
