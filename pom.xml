@@ -19,9 +19,12 @@
     </developers>
 
     <properties>
+        <bucket-name>library-learning</bucket-name>
+
         <!--region maven-->
         <java.version>11</java.version>
         <maven.site.version>3.9.0</maven.site.version>
+        <aws-maven.version>5.0.0.RELEASE</aws-maven.version>
         <maven.compiler.version>3.8.1</maven.compiler.version>
         <maven.surefire.version>3.0.0-M5</maven.surefire.version>
         <maven.dependency.version>3.1.2</maven.dependency.version>
@@ -91,6 +94,13 @@
         </repository>
     </repositories>
     <build>
+        <extensions>
+            <extension>
+                <groupId>org.springframework.build</groupId>
+                <artifactId>aws-maven</artifactId>
+                <version>${aws-maven.version}</version>
+            </extension>
+        </extensions>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -144,6 +154,18 @@
             </plugin>
         </plugins>
     </build>
+    <distributionManagement>
+        <repository>
+            <id>bucket-release</id>
+            <name>Release Repository</name>
+            <url>s3://${bucket-name}/release</url>
+        </repository>
+        <snapshotRepository>
+            <id>bucket-snapshot</id>
+            <name>Snapshot Repository</name>
+            <url>s3://${bucket-name}/snapshot</url>
+        </snapshotRepository>
+    </distributionManagement>
     <reporting>
         <plugins>
             <plugin>
