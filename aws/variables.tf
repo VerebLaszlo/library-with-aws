@@ -1,24 +1,24 @@
-// Variables
-provider "aws" {
-  version = "~> 2.67"
-  region = "us-east-1"
-}
+# script parameters
+variable project_name { description = "Name of the project" }
 
-//region Constants
-variable "base_cidr_block" {
-  default = "10.0.0.0/20"
-}
+variable tableName { description = "Name of the dynamoDB table" }
 
-variable "tags" {
+variable tags {
   description = "Tags to use for ABAC"
   type = map(string)
-  default = {
-    access-project = "library"
-    access-team = "eng"
-  }
 }
 
-variable "tableName" {
-  default = "Books"
+#region configuration parameters
+variable region {
+  description = "The main region"
+  default = "us-east-1"
 }
-//endregion
+
+variable vpc_cidr {}
+
+variable public_cidrs { type = list(string) }
+
+variable private_cidrs { type = list(string) }
+
+variable access_ip {}
+#endregion

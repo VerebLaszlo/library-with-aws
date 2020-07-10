@@ -4,9 +4,7 @@ variable project_name {}
 variable tags { type = map(string) }
 
 # configuration parameters
-variable region {
-  description = "The name of the AWS region to set up a network within"
-}
+variable region {}
 
 variable vpc_cidr {}
 

@@ -1,3 +1,7 @@
-output "vpc_id" {
-  value = aws_vpc.library.id
+output vpc_region {
+  value = module.vpc.vpc_name
+}
+
+output vpc_name {
+  value = module.vpc.vpc_name
 }
