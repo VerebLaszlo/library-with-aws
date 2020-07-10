@@ -53,3 +53,27 @@ resource aws_ebs_volume library {
     var.tags
   )
 }
+
+resource aws_lb public_library {
+  name = "${var.project_name}-public-lb"
+  internal = false
+  load_balancer_type = "application"
+  security_groups = [module.vpc.public_sg_id]
+  subnets = module.vpc.public_subnet_ids
+
+  enable_deletion_protection = true
+
+  tags = var.tags
+}
+
+resource aws_lb private_library {
+  name = "${var.project_name}-private-lb"
+  internal = true
+  load_balancer_type = "application"
+  security_groups = [module.vpc.private_sg_id]
+  subnets = module.vpc.private_subnet_ids
+
+  enable_deletion_protection = false
+
+  tags = var.tags
+}

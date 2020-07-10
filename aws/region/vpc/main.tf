@@ -127,11 +127,11 @@ resource aws_default_route_table library_private {
 }
 
 resource aws_subnet library_private {
-  count = min(4, 2*length(data.aws_availability_zones.all))
+  count = min(2 , length(data.aws_availability_zones.all))
 
   vpc_id = aws_vpc.library.id
   cidr_block = var.private_cidrs[count.index]
-  availability_zone = data.aws_availability_zones.all.names[count.index%2]
+  availability_zone = data.aws_availability_zones.all.names[count.index]
 
   tags = merge({
     Name = "${var.project_name}_private_sn_${count.index + 1}" },
