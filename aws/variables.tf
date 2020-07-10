@@ -14,6 +14,12 @@ variable region {
   default = "us-east-1"
 }
 
+variable instance_type {}
+
+variable ami_owner_ids { type = list(string) }
+
+variable ami_name_filter { type = list(string) }
+
 variable vpc_cidr {}
 
 variable public_cidrs { type = list(string) }

@@ -8,6 +8,12 @@ variable region {
   description = "The name of the AWS region to set up a network within"
 }
 
+variable instance_type {}
+
+variable ami_owner_ids { type = list(string) }
+
+variable ami_name_filter { type = list(string) }
+
 variable vpc_cidr {}
 
 variable public_cidrs { type = list(string) }
