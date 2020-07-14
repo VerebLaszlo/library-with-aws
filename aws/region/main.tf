@@ -61,7 +61,7 @@ resource aws_lb public_library {
   security_groups = [module.vpc.public_sg_id]
   subnets = module.vpc.public_subnet_ids
 
-  enable_deletion_protection = true
+  enable_deletion_protection = false
 
   tags = var.tags
 }
