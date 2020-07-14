@@ -13,9 +13,11 @@ resource "aws_dynamodb_table" "books_table" {
     type = "S"
   }
 
+/*
   replica {
     region_name = "us-west-2"
   }
+*/
 
   tags = var.tags
 }

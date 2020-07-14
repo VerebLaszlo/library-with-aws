@@ -19,7 +19,8 @@ module us-east-1  {
   access_ip = var.access_ip
 }
 
-module us-west-2  {
+/*
+module us-west-2 {
   source = "./region"
   project_name = var.project_name
   tags = var.tags
@@ -33,8 +34,9 @@ module us-west-2  {
   private_cidrs = var.private_cidrs
   access_ip = var.access_ip
 }
+*/
 
-resource aws_s3_bucket  library-learning {
+resource aws_s3_bucket library-learning {
   bucket = "library-learning"
   region = var.region
   force_destroy = false
