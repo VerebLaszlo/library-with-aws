@@ -1,10 +1,5 @@
 //
-provider  aws  {
-  version = "~>2.69"
-  region = var.region
-}
-
-module us-east-1  {
+module us-east-1 {
   source = "./region"
   project_name = var.project_name
   tags = var.tags
@@ -17,6 +12,10 @@ module us-east-1  {
   public_cidrs = var.public_cidrs
   private_cidrs = var.private_cidrs
   access_ip = var.access_ip
+
+  providers = {
+    aws = aws.us-east-1
+  }
 }
 
 /*
@@ -33,6 +32,10 @@ module us-west-2 {
   public_cidrs = var.public_cidrs
   private_cidrs = var.private_cidrs
   access_ip = var.access_ip
+
+  providers = {
+    aws = aws.us-west-2
+  }
 }
 */
 
