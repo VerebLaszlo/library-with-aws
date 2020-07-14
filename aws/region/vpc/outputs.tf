@@ -1,3 +1,4 @@
+//
 output vpc_region {
   value = var.region
 }

@@ -1,0 +1,24 @@
+@startuml region
+:Route 53;
+split
+    :Region 1|
+    :Load Balancer 1;
+    split
+        :Availability Zone 1-1|
+        stop
+    split again
+        :Availability Zone 1-2|
+        stop
+    end split
+split again
+    :Region 2|
+    :Load Balancer 2;
+    split
+        :Availability Zone 2-1|
+        stop
+    split again
+        :Availability Zone 2-2|
+        stop
+    end split
+end split
+@enduml

@@ -5,8 +5,9 @@ resource aws_vpc library {
   enable_dns_hostnames = true
 
   tags = merge({
-    Name = "${var.project_name}_${var.region}_vpc" },
-    var.tags
+    Name = "${var.project_name}_${var.region}_vpc"
+  },
+  var.tags
   )
 }
 
@@ -31,8 +32,9 @@ resource aws_default_network_acl library {
   }
 
   tags = merge({
-    Name = "${var.project_name}_acl" },
-    var.tags
+    Name = "${var.project_name}_acl"
+  },
+  var.tags
   )
 }
 
@@ -40,8 +42,9 @@ resource aws_internet_gateway library {
   vpc_id = aws_vpc.library.id
 
   tags = merge({
-    Name = "${var.project_name}_igw" },
-    var.tags
+    Name = "${var.project_name}_igw"
+  },
+  var.tags
   )
 }
 
@@ -58,8 +61,9 @@ resource aws_route_table library_public {
   }
 
   tags = merge({
-    Name = "${var.project_name}_public_rt" },
-    var.tags
+    Name = "${var.project_name}_public_rt"
+  },
+  var.tags
   )
 }
 
@@ -72,8 +76,9 @@ resource aws_subnet library_public {
   availability_zone = data.aws_availability_zones.all.names[count.index]
 
   tags = merge({
-    Name = "${var.project_name}_public_sn_${count.index + 1}" },
-    var.tags
+    Name = "${var.project_name}_public_sn_${count.index + 1}"
+  },
+  var.tags
   )
 }
 
@@ -121,21 +126,23 @@ resource aws_default_route_table library_private {
   default_route_table_id = aws_vpc.library.default_route_table_id
 
   tags = merge({
-    Name = "${var.project_name}_private_rt" },
-    var.tags
+    Name = "${var.project_name}_private_rt"
+  },
+  var.tags
   )
 }
 
 resource aws_subnet library_private {
-  count = min(2 , length(data.aws_availability_zones.all))
+  count = min(2, length(data.aws_availability_zones.all))
 
   vpc_id = aws_vpc.library.id
   cidr_block = var.private_cidrs[count.index]
   availability_zone = data.aws_availability_zones.all.names[count.index]
 
   tags = merge({
-    Name = "${var.project_name}_private_sn_${count.index + 1}" },
-    var.tags
+    Name = "${var.project_name}_private_sn_${count.index + 1}"
+  },
+  var.tags
   )
 }
 
