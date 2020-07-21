@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: library
+  profiles:
+    active: prod
+
+cloud:
+  aws:
+    stack:
+      auto:false
+    region:
+      static: us-east-1

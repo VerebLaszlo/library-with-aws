@@ -23,18 +23,18 @@ class LibraryWithBooksConfiguration {
     private AmazonDynamoDB amazonDynamoDB;
 
     @PostConstruct
-    void test() {
-        new DynamoDBMapper(amazonDynamoDB).batchSave(generateBooks(NUMBER_OF_BOOKS));
+    void populateDB() {
+        new DynamoDBMapper(amazonDynamoDB).batchSave(generateBooks());
     }
 
     @NotNull
-    private List<BookModel> generateBooks(int numberOfBooksInLibrary) {
-        return IntStream.range(0, numberOfBooksInLibrary)
+    private static List<BookModel> generateBooks() {
+        return IntStream.range(0, NUMBER_OF_BOOKS)
                         .mapToObj(i -> new BookModel(null,
                                                      "Title " + i,
                                                      "Author " + i,
                                                      "Publisher " + i,
-                                                     "Isbn" + i))
+                                                     "Isbn " + i))
                         .collect(Collectors.toList());
     }
 }

@@ -1,5 +1,8 @@
 package com.epam.library.repository.dynamo;
 
+import com.epam.library.model.*;
+import com.epam.library.util.*;
+
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import org.jetbrains.annotations.*;
 
@@ -20,6 +23,14 @@ public class BookModel {
 
     public BookModel() {
         this(null, "", "", "", "");
+    }
+
+    public BookModel(@Nullable String id, String title, String author, String publisher, Isbn isbn) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.publisher = publisher;
+        this.isbn = isbn.getNumber();
     }
 
     public BookModel(@Nullable String id, String title, String author, String publisher, String isbn) {
@@ -71,12 +82,14 @@ public class BookModel {
     }
 
     @SuppressWarnings("NonFinalFieldReferencedInHashCode")
+    @Justification("Setters are required, finals can not be used")
     @Override
     public int hashCode() {
         return Objects.hash(title, author, publisher, isbn);
     }
 
     @SuppressWarnings("NonFinalFieldReferenceInEquals")
+    @Justification("Setters are required, finals can not be used")
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;

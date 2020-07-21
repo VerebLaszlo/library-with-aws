@@ -7,14 +7,13 @@ import com.epam.library.util.*;
 import org.junit.jupiter.api.*;
 
 import org.springframework.beans.factory.annotation.*;
-import org.springframework.boot.test.context.*;
 import org.springframework.context.annotation.*;
 import org.springframework.test.annotation.*;
 
 import static com.epam.library.util.LibraryAssertions.*;
 import static org.assertj.core.api.BDDAssumptions.*;
 
-@SpringBootTest
+@IntegrationTest
 @Import(LibraryWithBooksConfiguration.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @DisplayNameGeneration(CamelCaseDisplayNameGenerator.class)

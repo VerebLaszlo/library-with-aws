@@ -21,13 +21,13 @@ class LibraryConfiguration {
     @Bean
     public AmazonDynamoDB amazonDynamoDB() {
         var amazonDynamoDB = DynamoDBEmbedded.create().amazonDynamoDB();
-        createTable(amazonDynamoDB, BookModel.TABLE_NAME, BookModel.HASH_KEY_NAME);
+        createTable(amazonDynamoDB);
         return amazonDynamoDB;
     }
 
     //region helper functions
-    private static CreateTableResult createTable(AmazonDynamoDB ddb, String tableName, String hashKeyName) {
-        return ddb.createTable(createTableCreationRequest(tableName, hashKeyName));
+    private static CreateTableResult createTable(AmazonDynamoDB ddb) {
+        return ddb.createTable(createTableCreationRequest(BookModel.TABLE_NAME, BookModel.HASH_KEY_NAME));
     }
 
     private static CreateTableRequest createTableCreationRequest(String tableName, String hashKeyName) {

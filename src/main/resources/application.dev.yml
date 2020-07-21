@@ -1,0 +1,10 @@
+profile:
+  desc: Development profile
+
+cloud:
+  aws:
+    credentials:
+      instanceProfile: false
+      useDefaultAwsCredentialsChain: false
+      profileName: library
+      profilePath: ${user.home}/.aws/credentials

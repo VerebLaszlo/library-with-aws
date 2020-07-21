@@ -5,19 +5,19 @@ import com.epam.library.util.*;
 
 import org.junit.jupiter.api.*;
 
-import org.springframework.boot.test.context.*;
 import org.springframework.boot.test.mock.mockito.*;
 
 import static org.assertj.core.api.Assertions.*;
 
-@SpringBootTest
+@IntegrationTest
 @DisplayNameGeneration(CamelCaseDisplayNameGenerator.class)
 class LibraryApplicationShould {
+    private static final boolean CONTEXT_LOADED = true;
     @MockBean
     private BookRepository repository;
 
     @Test
     void loadContextWhenStarts() {
-        assertThat(true).as("Context was not loaded.").isTrue();
+        assertThat(CONTEXT_LOADED).as("Context was not loaded.").isTrue();
     }
 }

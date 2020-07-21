@@ -6,7 +6,7 @@
 
     <groupId>com.epam</groupId>
     <artifactId>library</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.1-RELEASE</version>
 
     <packaging>jar</packaging>
     <name>Library</name>
@@ -18,6 +18,18 @@
         </developer>
     </developers>
 
+    <distributionManagement>
+        <repository>
+            <id>bucket-release</id>
+            <name>Release Repository</name>
+            <url>s3://${bucket-name}/release</url>
+        </repository>
+        <snapshotRepository>
+            <id>bucket-snapshot</id>
+            <name>Snapshot Repository</name>
+            <url>s3://${bucket-name}/snapshot</url>
+        </snapshotRepository>
+    </distributionManagement>
     <properties>
         <bucket-name>library-learning</bucket-name>
 
@@ -103,6 +115,24 @@
         </extensions>
         <plugins>
             <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring.version}</version>
+                <configuration>
+                    <executable>true</executable>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>com.epam.library.LibraryApplication</mainClass>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven.compiler.version}</version>
@@ -114,7 +144,10 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven.surefire.version}</version>
                 <configuration>
-                    <argLine>-Dsqlite4java.library.path=${basedir}/target/dependencies</argLine>
+                    <argLine>
+                        -Dsqlite4java.library.path=${basedir}/target/dependencies
+                        -Dspring.profiles.active=test
+                    </argLine>
                     <includes>
                         <include>**/*Test.java</include>
                         <include>**/*Should.java</include>
@@ -154,18 +187,6 @@
             </plugin>
         </plugins>
     </build>
-    <distributionManagement>
-        <repository>
-            <id>bucket-release</id>
-            <name>Release Repository</name>
-            <url>s3://${bucket-name}/release</url>
-        </repository>
-        <snapshotRepository>
-            <id>bucket-snapshot</id>
-            <name>Snapshot Repository</name>
-            <url>s3://${bucket-name}/snapshot</url>
-        </snapshotRepository>
-    </distributionManagement>
     <reporting>
         <plugins>
             <plugin>
@@ -176,6 +197,21 @@
         </plugins>
     </reporting>
     <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <spring.profiles.active>dev</spring.profiles.active>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <spring.profiles.active>prod</spring.profiles.active>
+            </properties>
+        </profile>
         <profile>
             <id>start-dynamodb-local</id>
             <build>

@@ -31,7 +31,7 @@ class Converter {
                              book.getTitle(),
                              book.getAuthor(),
                              book.getPublisher(),
-                             book.getIsbn().getNumber()
+                             book.getIsbn()
         );
     }
 }
