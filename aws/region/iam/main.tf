@@ -1,4 +1,4 @@
-//
+# IAM configuration
 resource aws_iam_policy policy-accessBooksTable {
   name="AccessBooksTable"
   description = "Allows editing items in the Books table"
@@ -27,7 +27,7 @@ resource aws_iam_policy policy-accessBooksTable {
   EOF
 }
 
-resource aws_iam_policy policy-copyS3ToEC2 {
+resource aws_iam_policy policy-accessArtifactInS3 {
   name = "CopyS3ToEC2"
   description = "Allows copying objects form the Library Learning bucket"
   policy = <<-EOF
@@ -47,7 +47,7 @@ resource aws_iam_policy policy-copyS3ToEC2 {
             "s3:GetObject"
           ],
           "Resource": [
-            "arn:aws:s3:::library-learning/*"
+            "arn:aws:s3:::library-learning/release/com/epam/library/*"
           ]
         }
       ]
@@ -83,7 +83,7 @@ resource aws_iam_instance_profile ip-assumeEC2Role {
 
 resource aws_iam_role_policy_attachment rpa-copyS3ToEC2 {
   role = aws_iam_role.role-assumeEC2Role.name
-  policy_arn = aws_iam_policy.policy-copyS3ToEC2.arn
+  policy_arn = aws_iam_policy.policy-accessArtifactInS3.arn
 }
 
 resource aws_iam_role_policy_attachment rpa-accessBooksTable {
