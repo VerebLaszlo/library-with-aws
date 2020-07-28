@@ -34,7 +34,7 @@ module auto-scaling {
   image-id = var.image-id
   instance-type = var.instance-type
   s3-bucket-name = var.s3-bucket-name
-  subnet-ids = module.vpc.public-subnet-ids
+  subnet-ids = module.vpc.private-subnet-ids
   target-group-arn = module.load-balancer.target-group-arn
   ec2-instance-profile = module.iam.ec2-instance-profile-name
   accessArtifactInS3-policy = module.iam.accessArtifactInS3-policy

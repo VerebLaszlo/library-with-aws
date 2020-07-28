@@ -144,6 +144,7 @@ resource aws_subnet private-subnet {
   vpc_id = aws_vpc.vpc-main.id
   cidr_block = var.private-cidrs[count.index]
   availability_zone = data.aws_availability_zones.all.names[count.index]
+  map_public_ip_on_launch = false
 
   tags = merge({
     Name = "snPrivate${var.project-name}-${data.aws_availability_zones.all.names[count.index]}" },
