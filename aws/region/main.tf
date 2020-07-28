@@ -6,14 +6,14 @@ module iam {
 
 module vpc {
   source = "./vpc"
-  project_name = var.project_name
+  project-name = var.project_name
   tags = var.tags
 
   region = var.region
-  vpc_cidr = var.vpc_cidr
-  public_cidrs = var.public_cidrs
-  private_cidrs = var.private_cidrs
-  access_ip = var.access_ip
+  vpc-cidr = var.vpc_cidr
+  public-cidrs = var.public_cidrs
+  private-cidrs = var.private_cidrs
+  access-ip = var.access_ip
 }
 
 data aws_ami linux {

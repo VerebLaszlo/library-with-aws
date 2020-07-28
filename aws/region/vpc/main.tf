@@ -1,186 +1,194 @@
 // Virtual Private Cloud configuration
-resource aws_vpc library {
-  cidr_block = var.vpc_cidr
+resource aws_vpc vpc-main {
+  cidr_block = var.vpc-cidr
   enable_dns_support = true
   enable_dns_hostnames = true
 
   tags = merge({
-    Name = "${var.project_name}_${var.region}_vpc"
-  },
-  var.tags
+    Name = "vpc${var.project-name}_${var.region}" },
+    var.tags
   )
 }
 
-resource aws_default_network_acl library {
-  default_network_acl_id = aws_vpc.library.default_network_acl_id
-  subnet_ids = concat(tolist(aws_subnet.library_private.*.id), tolist(aws_subnet.library_public.*.id))
-  ingress {
-    protocol = "-1"
-    rule_no = 100
-    action = "allow"
-    cidr_block = "0.0.0.0/0"
-    from_port = 0
-    to_port = 0
-  }
-  egress {
-    protocol = "-1"
-    rule_no = 100
-    action = "allow"
-    cidr_block = "0.0.0.0/0"
-    from_port = 0
-    to_port = 0
-  }
+resource aws_internet_gateway igw {
+  vpc_id = aws_vpc.vpc-main.id
 
   tags = merge({
-    Name = "${var.project_name}_acl"
-  },
-  var.tags
+    Name = "igw${var.project-name}" },
+    var.tags
   )
 }
 
-resource aws_internet_gateway library {
-  vpc_id = aws_vpc.library.id
-
-  tags = merge({
-    Name = "${var.project_name}_igw"
-  },
-  var.tags
-  )
-}
-
-data aws_availability_zones all {
-  state = "available"
-}
+data aws_availability_zones all {}
 
 #region public resources
-resource aws_route_table library_public {
-  vpc_id = aws_vpc.library.id
+resource aws_route_table public-route-table {
+  vpc_id = aws_vpc.vpc-main.id
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.library.id
+    gateway_id = aws_internet_gateway.igw.id
   }
 
   tags = merge({
-    Name = "${var.project_name}_public_rt"
-  },
-  var.tags
+    Name = "rtPublic${var.project-name}" },
+    var.tags
   )
 }
 
-resource aws_subnet library_public {
+resource aws_subnet public-subnet {
   count = min(2, length(data.aws_availability_zones.all))
 
-  vpc_id = aws_vpc.library.id
-  cidr_block = var.public_cidrs[count.index]
+  vpc_id = aws_vpc.vpc-main.id
+  cidr_block = var.public-cidrs[count.index]
   map_public_ip_on_launch = true
   availability_zone = data.aws_availability_zones.all.names[count.index]
 
   tags = merge({
-    Name = "${var.project_name}_public_sn_${count.index + 1}"
-  },
-  var.tags
+    Name = "snPublic${var.project-name}-${data.aws_availability_zones.all.names[count.index]}" },
+    var.tags
   )
 }
 
-resource aws_route_table_association library_public {
-  count = length(aws_subnet.library_public)
+resource aws_route_table_association public-subnet-association {
+  count = length(aws_subnet.public-subnet)
 
-  subnet_id = aws_subnet.library_public.*.id[count.index]
-  route_table_id = aws_route_table.library_public.id
+  subnet_id = aws_subnet.public-subnet.*.id[count.index]
+  route_table_id = aws_route_table.public-route-table.id
+
+  depends_on = [aws_route_table.public-route-table, aws_subnet.public-subnet]
 }
 
-resource aws_security_group library_public {
-  name = "${var.project_name}_public_sg"
-  description = "Used for access to the public instances"
-  vpc_id = aws_vpc.library.id
+resource aws_ec2_transit_gateway tgw-main {
+  description = "The main transit gateway."
+  amazon_side_asn = 64512
+  auto_accept_shared_attachments = "disable"
+  default_route_table_association = "enable"
+  default_route_table_propagation = "enable"
+  dns_support = "enable"
+  vpn_ecmp_support = "enable"
 
-  #region SSH
-  ingress {
-    from_port = 22
-    to_port = 22
-    protocol = "tcp"
-    cidr_blocks = [var.access_ip]
-  }
-  #endregion
-  #region HTTP
-  ingress {
-    from_port = 80
-    to_port = 80
-    protocol = "tcp"
-    cidr_blocks = [var.access_ip]
-  }
-  egress {
-    from_port = 0
-    to_port = 0
-    protocol = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  #endregion
-
-  tags = var.tags
+  tags = merge({
+    Name = "tgw${var.project-name}"},
+    var.tags
+  )
 }
+
+resource aws_ec2_transit_gateway_vpc_attachment tgwa-main {
+  transit_gateway_id = aws_ec2_transit_gateway.tgw-main.id
+  vpc_id = aws_vpc.vpc-main.id
+  dns_support = "enable"
+
+  subnet_ids = aws_subnet.public-subnet[*].id
+
+  tags = merge({
+    Name = "tgwa${var.project-name}"},
+    var.tags
+  )
+}
+
+/*
+# causes conflict
+resource aws_route main-route {
+  route_table_id = aws_route_table.public-route-table.id
+  transit_gateway_id = aws_ec2_transit_gateway.tgw-main.id
+  destination_cidr_block = "0.0.0.0/0"
+}
+*/
 #endregion
 
 #region private resources
-resource aws_default_route_table library_private {
-  default_route_table_id = aws_vpc.library.default_route_table_id
+resource aws_eip eip {
+  vpc = true
 
   tags = merge({
-    Name = "${var.project_name}_private_rt"
-  },
-  var.tags
+    Name = "eip${var.project-name}"},
+    var.tags
   )
 }
 
-resource aws_subnet library_private {
+resource aws_nat_gateway nat-gateway {
+  allocation_id = aws_eip.eip.id
+  subnet_id = aws_subnet.public-subnet[0].id
+
+  tags = merge({
+    Name = "natgw${var.project-name}"},
+    var.tags
+  )
+}
+
+resource aws_default_route_table private-route-table {
+  default_route_table_id = aws_vpc.vpc-main.default_route_table_id
+  route {
+    cidr_block = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.nat-gateway.id
+  }
+
+  tags = merge({
+    Name = "rtPrivate${var.project-name}" },
+    var.tags
+  )
+}
+
+resource aws_route_table_association private-subnet-association {
+  count = length(aws_subnet.private-subnet)
+
+  subnet_id = aws_subnet.private-subnet.*.id[count.index]
+  route_table_id = aws_default_route_table.private-route-table.id
+
+  depends_on = [aws_default_route_table.private-route-table, aws_subnet.private-subnet]
+}
+
+resource aws_subnet private-subnet {
   count = min(2, length(data.aws_availability_zones.all))
 
-  vpc_id = aws_vpc.library.id
-  cidr_block = var.private_cidrs[count.index]
+  vpc_id = aws_vpc.vpc-main.id
+  cidr_block = var.private-cidrs[count.index]
   availability_zone = data.aws_availability_zones.all.names[count.index]
 
   tags = merge({
-    Name = "${var.project_name}_private_sn_${count.index + 1}"
-  },
-  var.tags
+    Name = "snPrivate${var.project-name}-${data.aws_availability_zones.all.names[count.index]}" },
+    var.tags
   )
 }
+#endregion
 
-resource aws_route_table_association library_private {
-  count = length(aws_subnet.library_private)
-
-  subnet_id = aws_subnet.library_private.*.id[count.index]
-  route_table_id = aws_default_route_table.library_private.id
-}
-
-resource aws_security_group library_private {
-  name = "${var.project_name}_private_sg"
-  description = "Used for access to the private instances"
-  vpc_id = aws_vpc.library.id
-
-  #region SSH
-  ingress {
-    from_port = 22
-    to_port = 22
-    protocol = "tcp"
-    security_groups = [aws_security_group.library_public.id]
-  }
-  #endregion
-  #region HTTP
-  ingress {
-    from_port = 80
-    to_port = 80
-    protocol = "tcp"
-    security_groups = [aws_security_group.library_public.id]
-  }
-  egress {
-    from_port = 0
-    to_port = 0
-    protocol = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  #endregion
+resource aws_security_group main {
+  name = "sg${var.project-name}"
+  description = "The main security group."
+  vpc_id = aws_vpc.vpc-main.id
 
   tags = var.tags
 }
-#endregion
+
+resource aws_security_group_rule ssh-inbound-access {
+  description = "SSH inbound traffic."
+
+  type = "ingress"
+  protocol = "tcp"
+  from_port = 22
+  to_port = 22
+  security_group_id = aws_security_group.main.id
+  cidr_blocks = ["0.0.0.0/0"]
+}
+
+resource aws_security_group_rule http_inbound_access {
+  description = "Http inbound traffic."
+
+  type = "ingress"
+  protocol = "tcp"
+  from_port = 80
+  to_port = 80
+  security_group_id = aws_security_group.main.id
+  cidr_blocks = ["0.0.0.0/0"]
+}
+
+resource aws_security_group_rule all_outbound_access {
+  description = "All outbound traffic."
+
+  type = "egress"
+  protocol = "-1"
+  from_port = 0
+  to_port = 0
+  security_group_id = aws_security_group.main.id
+  cidr_blocks = ["0.0.0.0/0"]
+}
