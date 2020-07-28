@@ -29,7 +29,7 @@ resource aws_security_group_rule inbound_http {
   type              = "ingress"
   protocol          = "tcp"
   from_port         = 80
-  to_port           = 80
+  to_port           = 8080
   security_group_id = aws_security_group.sg-lb.id
   cidr_blocks       = ["0.0.0.0/0"]
 }
@@ -72,8 +72,8 @@ resource aws_lb_listener lbl-main {
 }
 
 resource aws_lb_target_group lb-library {
-  name = "lbtg${var.project-name}"
-  port = 80
+  name_prefix = "tg${substr(var.project-name,0,4)}"
+  port = 8080
   protocol = "HTTP"
   target_type = "instance"
   vpc_id = var.vpc-id
