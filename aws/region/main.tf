@@ -16,6 +16,16 @@ module vpc {
   access-ip = var.access_ip
 }
 
+module load-balancer {
+  source = "./load-balancer"
+  project-name = var.project_name
+  tags = var.tags
+
+  vpc-id = module.vpc.id
+  subnet-ids = module.vpc.public-subnet-ids
+}
+
+/*
 data aws_ami linux {
   most_recent = true
   filter {
@@ -77,3 +87,4 @@ resource aws_lb private_library {
 
   tags = var.tags
 }
+*/
