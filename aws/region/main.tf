@@ -1,4 +1,9 @@
 /* Container module for all of the network resources within a region. This is instantiated once per region. */
+module iam {
+  source = "./iam"
+  tags = var.tags
+}
+
 module vpc {
   source = "./vpc"
   project_name = var.project_name
