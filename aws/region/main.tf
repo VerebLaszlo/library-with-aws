@@ -6,19 +6,19 @@ module iam {
 
 module vpc {
   source = "./vpc"
-  project-name = var.project_name
+  project-name = var.project-name
   tags = var.tags
 
   region = var.region
-  vpc-cidr = var.vpc_cidr
-  public-cidrs = var.public_cidrs
-  private-cidrs = var.private_cidrs
-  access-ip = var.access_ip
+  vpc-cidr = var.vpc-cidr
+  public-cidrs = var.public-cidrs
+  private-cidrs = var.private-cidrs
+  access-ip = var.access-ip
 }
 
 module load-balancer {
   source = "./load-balancer"
-  project-name = var.project_name
+  project-name = var.project-name
   tags = var.tags
 
   vpc-id = module.vpc.id
@@ -27,13 +27,13 @@ module load-balancer {
 
 module auto-scaling {
   source = "./auto-scaling"
-  project-name = var.project_name
+  project-name = var.project-name
   tags = var.tags
 
   vpc-id = module.vpc.id
-  image-id = var.image_id
-  instance-type = var.instance_type
-  s3-bucket-name = var.s3_bucket_name
+  image-id = var.image-id
+  instance-type = var.instance-type
+  s3-bucket-name = var.s3-bucket-name
   subnet-ids = module.vpc.public-subnet-ids
   target-group-arn = module.load-balancer.target-group-arn
   ec2-instance-profile = module.iam.ec2-instance-profile-name

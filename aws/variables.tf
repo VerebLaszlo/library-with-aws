@@ -1,5 +1,5 @@
 # script parameters
-variable project_name { description = "Name of the project" }
+variable project-name { description = "Name of the project" }
 
 variable tableName { description = "Name of the dynamoDB table" }
 
@@ -8,23 +8,25 @@ variable tags {
   type = map(string)
 }
 
-#region configuration parameters
+# configuration parameters
 variable region {
   description = "The main region"
   default = "us-east-1"
 }
 
-variable instance_type {}
+variable instance-type {
+  description = "Instance type to use for the service"
+  default = "t2.micro"
+}
 
-variable ami_owner_ids { type = list(string) }
+variable image-id {
+  description = "Image id to use on the instance"
+}
 
-variable ami_name_filter { type = list(string) }
+variable vpc-cidr {}
 
-variable vpc_cidr {}
+variable public-cidrs { type = list(string) }
 
-variable public_cidrs { type = list(string) }
+variable private-cidrs { type = list(string) }
 
-variable private_cidrs { type = list(string) }
-
-variable access_ip {}
-#endregion
+variable access-ip {}
