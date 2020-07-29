@@ -8,5 +8,5 @@ output public-subnet-ids {
 }
 
 output private-subnet-ids {
-  value = aws_subnet.private-subnet.*.id
+  value = module.private.subnet-ids
 }
