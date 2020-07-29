@@ -82,9 +82,9 @@ resource aws_launch_configuration lc-main {
 resource aws_autoscaling_group asg-main {
   name = "asg${var.project-name}"
   launch_configuration = aws_launch_configuration.lc-main.name
-  desired_capacity = 1
+  desired_capacity = 2
   min_size = 1
-  max_size = 2
+  max_size = 3
   health_check_type = "ELB"
   vpc_zone_identifier = var.subnet-ids
   target_group_arns = [var.target-group-arn]
@@ -100,6 +100,20 @@ resource aws_autoscaling_group asg-main {
     map("key", "access-team", "value", var.tags["access-team"], "propagate_at_launch", true),
     map("key", "Name", "value", "${var.project-name}_ec2", "propagate_at_launch", true)
   ]
+}
+
+resource aws_autoscaling_policy asp-main {
+  name = "asp${var.project-name}"
+  policy_type = "TargetTrackingScaling"
+  target_tracking_configuration {
+    disable_scale_in = false
+    target_value = 50
+    predefined_metric_specification {
+      predefined_metric_type = "ASGAverageCPUUtilization"
+    }
+  }
+  cooldown = 0
+  autoscaling_group_name = aws_autoscaling_group.asg-main.name
 }
 
 resource aws_autoscaling_attachment library {
