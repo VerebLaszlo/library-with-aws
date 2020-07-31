@@ -20,19 +20,6 @@ resource aws_internet_gateway igw {
 }
 
 #public resources
-resource aws_route_table public-route-table {
-  vpc_id = aws_vpc.vpc-main.id
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.igw.id
-  }
-
-  tags = merge({
-    Name = "rtPublic${var.project-name}" },
-    var.tags
-  )
-}
-
 module public {
   source = "./subnet"
   project-name = var.project-name
@@ -42,7 +29,7 @@ module public {
   vpc-id = aws_vpc.vpc-main.id
   vpc-cidr = aws_vpc.vpc-main.cidr_block
   cidrs = var.public-cidrs
-  route-table = aws_route_table.public-route-table
+  igw-id = aws_internet_gateway.igw.id
   http-inbound-port = 80
   http-outbound-port = 80
   response-port = {
@@ -112,19 +99,6 @@ resource aws_nat_gateway nat-gateway {
   )
 }
 
-resource aws_default_route_table private-route-table {
-  default_route_table_id = aws_vpc.vpc-main.default_route_table_id
-  route {
-    cidr_block = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.nat-gateway.id
-  }
-
-  tags = merge({
-    Name = "rtPrivate${var.project-name}" },
-    var.tags
-  )
-}
-
 module private {
   source = "./subnet"
   project-name = var.project-name
@@ -134,7 +108,7 @@ module private {
   vpc-id = aws_vpc.vpc-main.id
   vpc-cidr = aws_vpc.vpc-main.cidr_block
   cidrs = var.private-cidrs
-  route-table = aws_default_route_table.private-route-table
+  igw-id = aws_nat_gateway.nat-gateway.id
   http-inbound-port = 8080
   http-outbound-port = 80
   response-port = {

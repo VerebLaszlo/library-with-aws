@@ -12,7 +12,7 @@ variable vpc-cidr {}
 
 variable cidrs { type = list(string) }
 
-variable route-table {}
+variable igw-id {}
 
 variable http-inbound-port {}
 

@@ -3,6 +3,19 @@ locals {
   resource-name = "${var.is-public ? "Public" : "Private"}${var.project-name}"
 }
 
+resource aws_route_table route-table {
+  vpc_id = var.vpc-id
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = var.igw-id
+  }
+
+  tags = merge({
+    Name = "rt${local.resource-name}" },
+  var.tags
+  )
+}
+
 data aws_availability_zones all {}
 
 # Depends on autoscaled instances
@@ -24,9 +37,9 @@ resource aws_route_table_association subnet-association {
   count = length(aws_subnet.subnet)
 
   subnet_id = aws_subnet.subnet.*.id[count.index]
-  route_table_id = var.route-table.id
+  route_table_id = aws_route_table.route-table.id
 
-  depends_on = [var.route-table, aws_subnet.subnet]
+  depends_on = [aws_route_table.route-table, aws_subnet.subnet]
 }
 
 resource aws_network_acl acl {
