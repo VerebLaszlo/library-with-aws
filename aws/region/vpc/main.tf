@@ -34,7 +34,7 @@ resource aws_route_table public-route-table {
 }
 
 module public {
-  source = "./public"
+  source = "./subnet"
   project-name = var.project-name
   tags = var.tags
 
@@ -126,7 +126,7 @@ resource aws_default_route_table private-route-table {
 }
 
 module private {
-  source = "./security"
+  source = "./subnet"
   project-name = var.project-name
   tags = var.tags
 
