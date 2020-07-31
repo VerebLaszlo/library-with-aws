@@ -8,12 +8,6 @@ variable is-public {}
 
 variable vpc-id {}
 
-variable vpc-cidr {}
-
 variable cidrs { type = list(string) }
 
 variable route-table {}
-
-variable http-inbound-port {}
-
-variable http-outbound-port {}

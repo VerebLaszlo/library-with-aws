@@ -1,10 +1,10 @@
-// Outputs
+# Outputs
 output id {
   value = aws_vpc.vpc-main.id
 }
 
 output public-subnet-ids {
-  value = aws_subnet.public-subnet.*.id
+  value = module.public.subnet-ids
 }
 
 output private-subnet-ids {

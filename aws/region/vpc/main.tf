@@ -19,9 +19,7 @@ resource aws_internet_gateway igw {
   )
 }
 
-data aws_availability_zones all {}
-
-#region public resources
+#public resources
 resource aws_route_table public-route-table {
   vpc_id = aws_vpc.vpc-main.id
   route {
@@ -35,27 +33,15 @@ resource aws_route_table public-route-table {
   )
 }
 
-resource aws_subnet public-subnet {
-  count = min(2, length(data.aws_availability_zones.all))
+module public {
+  source = "./public"
+  project-name = var.project-name
+  tags = var.tags
 
-  vpc_id = aws_vpc.vpc-main.id
-  cidr_block = var.public-cidrs[count.index]
-  map_public_ip_on_launch = true
-  availability_zone = data.aws_availability_zones.all.names[count.index]
-
-  tags = merge({
-    Name = "snPublic${var.project-name}-${data.aws_availability_zones.all.names[count.index]}" },
-    var.tags
-  )
-}
-
-resource aws_route_table_association public-subnet-association {
-  count = length(aws_subnet.public-subnet)
-
-  subnet_id = aws_subnet.public-subnet.*.id[count.index]
-  route_table_id = aws_route_table.public-route-table.id
-
-  depends_on = [aws_route_table.public-route-table, aws_subnet.public-subnet]
+  is-public = true
+  vpc-id = aws_vpc.vpc-main.id
+  cidrs = var.public-cidrs
+  route-table = aws_route_table.public-route-table
 }
 
 resource aws_ec2_transit_gateway tgw-main {
@@ -78,7 +64,7 @@ resource aws_ec2_transit_gateway_vpc_attachment tgwa-main {
   vpc_id = aws_vpc.vpc-main.id
   dns_support = "enable"
 
-  subnet_ids = aws_subnet.public-subnet[*].id
+  subnet_ids = module.public.subnet-ids
 
   tags = merge({
     Name = "tgwa${var.project-name}"},
@@ -108,7 +94,8 @@ resource aws_eip eip {
 
 resource aws_nat_gateway nat-gateway {
   allocation_id = aws_eip.eip.id
-  subnet_id = aws_subnet.public-subnet[0].id
+  # TODO investigate which subnet to choose
+  subnet_id = module.public.subnet-ids[0]
 
   depends_on = [aws_internet_gateway.igw]
 
@@ -135,10 +122,14 @@ module private {
   source = "./security"
   project-name = var.project-name
   tags = var.tags
+
+  is-public = false
   vpc-id = aws_vpc.vpc-main.id
   vpc-cidr = aws_vpc.vpc-main.cidr_block
   cidrs = var.private-cidrs
   route-table = aws_default_route_table.private-route-table
+  http-inbound-port = 8080
+  http-outbound-port = 80
 }
 #endregion
 
