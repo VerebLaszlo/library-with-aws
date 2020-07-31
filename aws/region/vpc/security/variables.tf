@@ -17,3 +17,10 @@ variable route-table {}
 variable http-inbound-port {}
 
 variable http-outbound-port {}
+
+variable response-port {
+  type = object({
+    from = number
+    to = number
+  })
+}

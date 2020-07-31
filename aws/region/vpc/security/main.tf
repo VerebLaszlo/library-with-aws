@@ -6,13 +6,13 @@ locals {
 data aws_availability_zones all {}
 
 # Depends on autoscaled instances
-resource aws_subnet private-subnet {
+resource aws_subnet subnet {
   count = min(2, length(data.aws_availability_zones.all))
 
   vpc_id = var.vpc-id
   cidr_block = var.cidrs[count.index]
-  availability_zone = data.aws_availability_zones.all.names[count.index]
   map_public_ip_on_launch = var.is-public
+  availability_zone = data.aws_availability_zones.all.names[count.index]
 
   tags = merge({
     Name = "sn${local.resource-name}-${data.aws_availability_zones.all.names[count.index]}" },
@@ -20,26 +20,27 @@ resource aws_subnet private-subnet {
   )
 }
 
-resource aws_route_table_association private-subnet-association {
-  count = length(aws_subnet.private-subnet)
+resource aws_route_table_association subnet-association {
+  count = length(aws_subnet.subnet)
 
-  subnet_id = aws_subnet.private-subnet.*.id[count.index]
+  subnet_id = aws_subnet.subnet.*.id[count.index]
   route_table_id = var.route-table.id
 
-  depends_on = [var.route-table, aws_subnet.private-subnet]
+  depends_on = [var.route-table, aws_subnet.subnet]
 }
 
-resource aws_network_acl nacl-private-main {
+resource aws_network_acl acl {
   vpc_id = var.vpc-id
+  subnet_ids = aws_subnet.subnet[*].id
+
   tags = merge({
     Name = "nacl${local.resource-name}"},
     var.tags
   )
-  subnet_ids = aws_subnet.private-subnet[*].id
 }
 
-resource aws_network_acl_rule naclr-inbound-http {
-  network_acl_id = aws_network_acl.nacl-private-main.id
+resource aws_network_acl_rule acl-inbound-http-rule {
+  network_acl_id = aws_network_acl.acl.id
   rule_number = 100
   cidr_block = "0.0.0.0/0"
   protocol = "tcp"
@@ -49,8 +50,8 @@ resource aws_network_acl_rule naclr-inbound-http {
   egress = false
 }
 
-resource aws_network_acl_rule naclr-inbound-https {
-  network_acl_id = aws_network_acl.nacl-private-main.id
+resource aws_network_acl_rule acl-inbound-https-rule {
+  network_acl_id = aws_network_acl.acl.id
   rule_number = 110
   cidr_block = "0.0.0.0/0"
   protocol = "tcp"
@@ -60,8 +61,9 @@ resource aws_network_acl_rule naclr-inbound-https {
   egress = false
 }
 
-resource aws_network_acl_rule naclr-inbound-ssh {
-  network_acl_id = aws_network_acl.nacl-private-main.id
+resource aws_network_acl_rule acl-inbound-ssh-rule {
+  count = var.is-public == true ? 0 : 1
+  network_acl_id = aws_network_acl.acl.id
   rule_number = 120
   cidr_block = var.vpc-cidr
   protocol = "tcp"
@@ -71,19 +73,19 @@ resource aws_network_acl_rule naclr-inbound-ssh {
   egress = false
 }
 
-resource aws_network_acl_rule naclr-inbound-response {
-  network_acl_id = aws_network_acl.nacl-private-main.id
+resource aws_network_acl_rule aclr-inbound-response-rule {
+  network_acl_id = aws_network_acl.acl.id
   rule_number = 140
   cidr_block = "0.0.0.0/0"
   protocol = "tcp"
-  from_port = 32768
-  to_port = 65535
+  from_port = var.response-port.from
+  to_port = var.response-port.to
   rule_action = "allow"
   egress = false
 }
 
-resource aws_network_acl_rule naclr-outbound-http {
-  network_acl_id = aws_network_acl.nacl-private-main.id
+resource aws_network_acl_rule aclr-outbound-http-rule {
+  network_acl_id = aws_network_acl.acl.id
   rule_number = 100
   cidr_block = "0.0.0.0/0"
   protocol = "tcp"
@@ -93,8 +95,8 @@ resource aws_network_acl_rule naclr-outbound-http {
   egress = true
 }
 
-resource aws_network_acl_rule naclr-outbound-https {
-  network_acl_id = aws_network_acl.nacl-private-main.id
+resource aws_network_acl_rule acl-outbound-https-rule {
+  network_acl_id = aws_network_acl.acl.id
   rule_number = 110
   cidr_block = "0.0.0.0/0"
   protocol = "tcp"
@@ -104,13 +106,13 @@ resource aws_network_acl_rule naclr-outbound-https {
   egress = true
 }
 
-resource aws_network_acl_rule naclr-outbound-response {
-  network_acl_id = aws_network_acl.nacl-private-main.id
+resource aws_network_acl_rule acl-outbound-response-rule {
+  network_acl_id = aws_network_acl.acl.id
   rule_number = 140
   cidr_block = "0.0.0.0/0"
   protocol = "tcp"
-  from_port = 32768
-  to_port = 65535
+  from_port = var.response-port.from
+  to_port = var.response-port.to
   rule_action = "allow"
   egress = true
 }

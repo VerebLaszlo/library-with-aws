@@ -40,8 +40,15 @@ module public {
 
   is-public = true
   vpc-id = aws_vpc.vpc-main.id
+  vpc-cidr = aws_vpc.vpc-main.cidr_block
   cidrs = var.public-cidrs
   route-table = aws_route_table.public-route-table
+  http-inbound-port = 80
+  http-outbound-port = 80
+  response-port = {
+    from = 1024
+    to = 65535
+  }
 }
 
 resource aws_ec2_transit_gateway tgw-main {
@@ -130,6 +137,10 @@ module private {
   route-table = aws_default_route_table.private-route-table
   http-inbound-port = 8080
   http-outbound-port = 80
+  response-port = {
+    from = 32768
+    to = 65535
+  }
 }
 #endregion
 

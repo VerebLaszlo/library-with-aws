@@ -1,4 +1,4 @@
 # Outputs
 output subnet-ids {
-  value = aws_subnet.private-subnet[*].id
+  value = aws_subnet.subnet[*].id
 }
