@@ -14,13 +14,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 class GivenLibraryWithBooks extends GivenLibrary {
     private static final Book BOOK_STUB = new Book("Title", "Author", "Publisher", new Isbn("ISBN"));
-    private static final String EXPECTED_BOOKS_IN_LIBRARY =
-            "[{\"id\":null,\"isbn\":{\"number\":\"ISBN\"},\"title\":\"Title\",\"author\":\"Author\","
-            + "\"publisher\":\"Publisher\"}"
-            + ",{\"id\":null,\"isbn\":{\"number\":\"a\"},\"title\":\"Title\",\"author\":\"Author\","
-            + "\"publisher\":\"Publisher\"}"
-            + ",{\"id\":null,\"isbn\":{\"number\":\"b\"},\"title\":\"Title\",\"author\":\"Author\","
-            + "\"publisher\":\"Publisher\"}]";
+    private static final String EXPECTED_BOOKS_IN_LIBRARY
+            = "[{\"id\":null,\"isbn\":\"ISBN\",\"title\":\"Title\",\"author\":\"Author\",\"publisher\":\"Publisher\"}"
+            + ",{\"id\":null,\"isbn\":\"a\",\"title\":\"Title\",\"author\":\"Author\",\"publisher\":\"Publisher\"}"
+            + ",{\"id\":null,\"isbn\":\"b\",\"title\":\"Title\",\"author\":\"Author\",\"publisher\":\"Publisher\"}]";
 
     @BeforeEach
     final void beforeEach() {
