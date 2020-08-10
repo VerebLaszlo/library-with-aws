@@ -87,13 +87,15 @@ resource aws_autoscaling_group asg-main {
   max_size = 3
   health_check_type = "ELB"
   vpc_zone_identifier = var.subnet-ids
-  target_group_arns = [var.target-group-arn]
+  target_group_arns = [var.dep-target-group.arn]
   timeouts {
     delete = "1m"
   }
   lifecycle {
     create_before_destroy = true
   }
+
+  depends_on = [var.dep-target-group]
 
   tags = [
     map("key", "access-project", "value", var.tags["access-project"], "propagate_at_launch", true),
@@ -117,6 +119,6 @@ resource aws_autoscaling_policy asp-main {
 }
 
 resource aws_autoscaling_attachment library {
-  alb_target_group_arn = var.target-group-arn
+  alb_target_group_arn = var.dep-target-group.arn
   autoscaling_group_name = aws_autoscaling_group.asg-main.id
 }

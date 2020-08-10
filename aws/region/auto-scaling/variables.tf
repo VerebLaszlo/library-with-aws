@@ -14,7 +14,7 @@ variable instance-type {}
 
 variable subnet-ids {}
 
-variable target-group-arn {}
+variable dep-target-group {}
 
 variable ec2-instance-profile {}
 

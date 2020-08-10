@@ -36,7 +36,7 @@ resource aws_subnet subnet {
 resource aws_route_table_association subnet-association {
   count = length(aws_subnet.subnet)
 
-  subnet_id = aws_subnet.subnet.*.id[count.index]
+  subnet_id = aws_subnet.subnet[count.index].id
   route_table_id = aws_route_table.route-table.id
 
   depends_on = [aws_route_table.route-table, aws_subnet.subnet]
