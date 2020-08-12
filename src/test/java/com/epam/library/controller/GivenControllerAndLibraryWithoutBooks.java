@@ -11,7 +11,7 @@ import static java.util.Collections.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
-class GivenLibraryWithoutBooks extends GivenLibrary {
+class GivenControllerAndLibraryWithoutBooks extends GivenControllerAndLibrary {
 
     @BeforeEach
     final void beforeEach() {

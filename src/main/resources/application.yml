@@ -7,6 +7,10 @@ spring:
 cloud:
   aws:
     stack:
-      auto:false
+      auto: false
     region:
       static: us-east-1
+
+dynamo:
+  readCapacity: 1000
+  writeCapacity: 1000

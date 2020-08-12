@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @IntegrationTest
 @AutoConfigureMockMvc
 @DisplayNameGeneration(CamelCaseDisplayNameGenerator.class)
-class GivenLibrary {
+class GivenControllerAndLibrary {
     static final String BOOKS_REST_API = "/api/v1/books";
 
     static final Book newBookStub = new Book("New Title", "New Author", "New Publisher", new Isbn("New ISBN"));

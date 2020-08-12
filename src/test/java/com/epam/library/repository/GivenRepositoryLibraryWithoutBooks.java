@@ -7,17 +7,15 @@ import com.epam.library.util.*;
 import org.junit.jupiter.api.*;
 
 import org.springframework.beans.factory.annotation.*;
-import org.springframework.context.annotation.*;
 import org.springframework.test.annotation.*;
 
 import static com.epam.library.util.LibraryAssertions.*;
 import static org.assertj.core.api.BDDAssumptions.*;
 
 @IntegrationTest
-@Import(LibraryConfiguration.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @DisplayNameGeneration(CamelCaseDisplayNameGenerator.class)
-class GivenLibraryWithoutBooks {
+class GivenRepositoryLibraryWithoutBooks {
     private static final Book BOOK_STUB = new Book("Title", "Author", "Publisher", new Isbn("Isdb"));
     @Autowired
     private BookRepository repository;

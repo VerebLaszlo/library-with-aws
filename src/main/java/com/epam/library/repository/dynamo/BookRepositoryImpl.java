@@ -5,13 +5,19 @@ import com.epam.library.service.BookService.*;
 
 import com.amazonaws.services.dynamodbv2.*;
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
+import org.slf4j.*;
 
 import org.springframework.stereotype.*;
 
 import java.util.*;
 
+import static java.util.Collections.*;
+import static org.slf4j.LoggerFactory.*;
+
 @Repository
 public class BookRepositoryImpl implements BookRepository {
+    private static final Logger LOG = getLogger(BookRepositoryImpl.class);
+
     private final Converter converter;
     private final DynamoDBMapper mapper;
 
@@ -22,7 +28,12 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public List<Book> getBooks() {
-        return converter.convert(new ArrayList<>(mapper.scan(BookModel.class, new DynamoDBScanExpression())));
+        try {
+            return converter.convert(new ArrayList<>(mapper.scan(BookModel.class, new DynamoDBScanExpression())));
+        } catch (RuntimeException e) {
+            LOG.error("Could not get books from DB.", e);
+            return emptyList();
+        }
     }
 
     @Override

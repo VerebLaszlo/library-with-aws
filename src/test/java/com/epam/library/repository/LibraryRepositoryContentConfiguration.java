@@ -8,15 +8,13 @@ import org.jetbrains.annotations.*;
 
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.test.context.*;
-import org.springframework.context.annotation.*;
 
 import javax.annotation.*;
 import java.util.*;
 import java.util.stream.*;
 
 @TestConfiguration
-@Import(LibraryConfiguration.class)
-class LibraryWithBooksConfiguration {
+class LibraryRepositoryContentConfiguration {
     static final int NUMBER_OF_BOOKS = 5;
 
     @Autowired

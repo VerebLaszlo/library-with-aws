@@ -50,6 +50,7 @@
 
         <!--region dependencies-->
         <spring.version>2.3.1.RELEASE</spring.version>
+        <mockito-core.version>3.4.6</mockito-core.version>
         <jetbrains.annotations.version>[19.0.0, 20.0.0)</jetbrains.annotations.version>
         <aws.java.sdk.version>[1.11.807, 2.0.0)</aws.java.sdk.version>
         <!--endregion-->
@@ -58,6 +59,16 @@
         <aws.dynamodblocal.version>[1.12,2.0)</aws.dynamodblocal.version>
         <!--endregion-->
     </properties>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>${mockito-core.version}</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
         <!--region implementation dependencies-->
         <dependency>
@@ -82,6 +93,15 @@
         </dependency>
         <!--endregion-->
 
+        <!--region development & test-->
+        <!-- TODO do not include on prod env -->
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>DynamoDBLocal</artifactId>
+            <version>${aws.dynamodblocal.version}</version>
+        </dependency>
+        <!--endregion-->
+
         <!--region test dependencies-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -94,12 +114,6 @@
                     <artifactId>junit-vintage-engine</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.amazonaws</groupId>
-            <artifactId>DynamoDBLocal</artifactId>
-            <version>${aws.dynamodblocal.version}</version>
-            <scope>test</scope>
         </dependency>
         <!--endregion-->
     </dependencies>
@@ -125,6 +139,10 @@
                 <version>${spring.version}</version>
                 <configuration>
                     <executable>true</executable>
+                    <jvmArguments>
+                        -Dsqlite4java.library.path=${basedir}/target/dependencies
+                        -Dspring.profiles.active=dev
+                    </jvmArguments>
                 </configuration>
                 <executions>
                     <execution>
@@ -177,7 +195,7 @@
                 <executions>
                     <execution>
                         <id>copy-dependencies</id>
-                        <phase>process-test-resources</phase>
+                        <phase>process-resources</phase>
                         <goals>
                             <goal>copy-dependencies</goal>
                         </goals>

@@ -12,7 +12,7 @@ import static com.epam.library.util.LibraryAssertions.then;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
-class GivenLibraryWithBooks extends GivenLibrary {
+class GivenControllerAndLibraryWithBooks extends GivenControllerAndLibrary {
     private static final Book BOOK_STUB = new Book("Title", "Author", "Publisher", new Isbn("ISBN"));
     private static final String EXPECTED_BOOKS_IN_LIBRARY
             = "[{\"id\":null,\"isbn\":\"ISBN\",\"title\":\"Title\",\"author\":\"Author\",\"publisher\":\"Publisher\"}"

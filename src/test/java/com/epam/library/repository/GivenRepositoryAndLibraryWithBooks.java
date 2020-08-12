@@ -14,10 +14,10 @@ import static com.epam.library.util.LibraryAssertions.*;
 import static org.assertj.core.api.BDDAssumptions.*;
 
 @IntegrationTest
-@Import(LibraryWithBooksConfiguration.class)
+@Import(LibraryRepositoryContentConfiguration.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @DisplayNameGeneration(CamelCaseDisplayNameGenerator.class)
-class GivenLibraryWithBooks {
+class GivenRepositoryAndLibraryWithBooks {
     private static final Book BOOK_STUB = new Book("Title", "Author", "Publisher", new Isbn("Isdb"));
     @Autowired
     private BookRepository repository;
@@ -26,7 +26,7 @@ class GivenLibraryWithBooks {
     void listingBooks_should_returnBooks() {
         var result = repository.getBooks();
 
-        then(result).hasSize(LibraryWithBooksConfiguration.NUMBER_OF_BOOKS);
+        then(result).hasSize(LibraryRepositoryContentConfiguration.NUMBER_OF_BOOKS);
     }
 
     @Test
