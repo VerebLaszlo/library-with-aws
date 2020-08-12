@@ -22,13 +22,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 class GivenControllerAndLibrary {
     static final String BOOKS_REST_API = "/api/v1/books";
 
-    static final Book newBookStub = new Book("New Title", "New Author", "New Publisher", new Isbn("New ISBN"));
+    static final Book newBookStub = new Book(new Isbn("New ISBN"), "New Title", "New Author", "New Publisher",
+                                             "/book-0.png");
 
     static final String INPUTTED_BOOK_JSON
-            = "{\"isbn\":{\"number\":\"ISBN\"},\"title\":\"Title\",\"author\":\"Author\",\"publisher\":\"Publisher\"}";
+            = "{\"isbn\":{\"number\":\"ISBN\"},\"title\":\"Title\",\"author\":\"Author\",\"publisher\":\"Publisher\",\"coverUrl\":\"/book-0.png\"}";
     static final String EXPECTED_NEW_BOOK_JSON
             = "{\"id\":null,\"isbn\":\"New ISBN\",\"title\":\"New Title\",\"author\":\"New Author\","
-              + "\"publisher\":\"New Publisher\"}";
+              + "\"publisher\":\"New Publisher\",\"coverUrl\":\"/book-0.png\"}";
 
     @Autowired
     protected MockMvc mvc;

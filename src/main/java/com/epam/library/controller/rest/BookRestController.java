@@ -1,4 +1,4 @@
-package com.epam.library.controller;
+package com.epam.library.controller.rest;
 
 import com.epam.library.model.*;
 import com.epam.library.service.*;
@@ -12,11 +12,11 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/v1/books")
-class BookController {
-    private static final Logger LOG = LoggerFactory.getLogger(BookController.class);
+class BookRestController {
+    private static final Logger LOG = LoggerFactory.getLogger(BookRestController.class);
     private final BookService bookService;
 
-    BookController(BookService bookService) {
+    BookRestController(BookService bookService) {
         this.bookService = bookService;
     }
 

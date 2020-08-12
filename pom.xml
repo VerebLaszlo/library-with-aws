@@ -50,6 +50,9 @@
 
         <!--region dependencies-->
         <spring.version>2.3.1.RELEASE</spring.version>
+        <jstl.version>1.2</jstl.version>
+        <servlet.version>4.0.1</servlet.version>
+        <jasper.version>9.0.36</jasper.version>
         <mockito-core.version>3.4.6</mockito-core.version>
         <jetbrains.annotations.version>[19.0.0, 20.0.0)</jetbrains.annotations.version>
         <aws.java.sdk.version>[1.11.807, 2.0.0)</aws.java.sdk.version>
@@ -70,7 +73,7 @@
         </dependencies>
     </dependencyManagement>
     <dependencies>
-        <!--region implementation dependencies-->
+        <!--region spring web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -81,6 +84,26 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
             <version>${spring.version}</version>
         </dependency>
+        <!---->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${servlet.version}</version>
+        </dependency><!--
+        -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>${jstl.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
+            <version>${jasper.version}</version>
+        </dependency>
+        <!--endregion-->
+
+        <!--region implementation dependencies-->
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>

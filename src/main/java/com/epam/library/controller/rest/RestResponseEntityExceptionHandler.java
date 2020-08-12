@@ -1,4 +1,4 @@
-package com.epam.library.controller;
+package com.epam.library.controller.rest;
 
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;

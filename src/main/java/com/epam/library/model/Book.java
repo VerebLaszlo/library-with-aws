@@ -10,21 +10,27 @@ public class Book {
     private final String title;
     private final String author;
     private final String publisher;
+    private final String coverUrl;
 
     private Book() {
-        this("", "", "", new Isbn(""));
+        this(new Isbn(""), "", "", "", "");
     }
 
-    public Book(String title, String author, String publisher, Isbn isbn) {
-        this(title, author, publisher, isbn, null);
+    public Book(Isbn isbn, String title, String author, String publisher, String coverUrl) {
+        this(isbn, title, author, publisher, coverUrl, null);
     }
 
-    public Book(String title, String author, String publisher, Isbn isbn, @Nullable String id) {
+    public Book(Isbn isbn, String title, String author, String publisher, String coverUrl, @Nullable String id) {
         this.title = title;
         this.author = author;
         this.publisher = publisher;
         this.isbn = isbn;
+        this.coverUrl = coverUrl;
         this.id = id;
+    }
+
+    public Isbn getIsbn() {
+        return isbn;
     }
 
     public String getTitle() {
@@ -39,8 +45,8 @@ public class Book {
         return publisher;
     }
 
-    public Isbn getIsbn() {
-        return isbn;
+    public String getCoverUrl() {
+        return coverUrl;
     }
 
     public Optional<@Nullable String> getId() {
@@ -65,7 +71,7 @@ public class Book {
 
     @Override
     public String toString() {
-        return String.format("Book{id='%s', isbn=%s, title='%s', author='%s', publisher='%s'}",
-                             id, isbn, title, author, publisher);
+        return String.format("Book{id='%s', isbn=%s, title='%s', author='%s', publisher='%s', coverUrl='%s'}",
+                             id, isbn, title, author, publisher, coverUrl);
     }
 }

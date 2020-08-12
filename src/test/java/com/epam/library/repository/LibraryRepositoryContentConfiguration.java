@@ -13,6 +13,8 @@ import javax.annotation.*;
 import java.util.*;
 import java.util.stream.*;
 
+import static java.lang.String.*;
+
 @TestConfiguration
 class LibraryRepositoryContentConfiguration {
     static final int NUMBER_OF_BOOKS = 5;
@@ -29,10 +31,10 @@ class LibraryRepositoryContentConfiguration {
     private static List<BookModel> generateBooks() {
         return IntStream.range(0, NUMBER_OF_BOOKS)
                         .mapToObj(i -> new BookModel(null,
-                                                     "Title " + i,
+                                                     "Isbn " + i, "Title " + i,
                                                      "Author " + i,
                                                      "Publisher " + i,
-                                                     "Isbn " + i))
+                                                     format("/book-%d.png", i)))
                         .collect(Collectors.toList());
     }
 }

@@ -16,7 +16,9 @@ import static org.assertj.core.api.BDDAssumptions.*;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @DisplayNameGeneration(CamelCaseDisplayNameGenerator.class)
 class GivenRepositoryLibraryWithoutBooks {
-    private static final Book BOOK_STUB = new Book("Title", "Author", "Publisher", new Isbn("Isdb"));
+
+
+    private static final Book BOOK_STUB = new Book(new Isbn("Isdb"), "Title", "Author", "Publisher", "/book-0.png");
     @Autowired
     private BookRepository repository;
 

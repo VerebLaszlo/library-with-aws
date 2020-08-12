@@ -16,6 +16,8 @@ import org.springframework.context.annotation.*;
 import java.util.*;
 import java.util.stream.*;
 
+import static java.lang.String.*;
+
 @SuppressWarnings("squid:S1258")
 @Justification("Autopopulated using @Value annotation")
 @Configuration
@@ -57,10 +59,11 @@ class DynamoDBConfig {
     private static List<BookModel> generateBooks() {
         return IntStream.range(0, NUMBER_OF_BOOKS)
                         .mapToObj(i -> new BookModel(null,
+                                                     "Isbn " + i,
                                                      "Title " + i,
                                                      "Author " + i,
                                                      "Publisher " + i,
-                                                     "Isbn " + i))
+                                                     format("img/book-%d.png", i)))
                         .collect(Collectors.toList());
     }
 
