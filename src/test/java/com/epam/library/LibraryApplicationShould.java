@@ -1,6 +1,6 @@
 package com.epam.library;
 
-import com.epam.library.service.BookService.*;
+import com.epam.library.service.*;
 import com.epam.library.util.*;
 
 import org.junit.jupiter.api.*;

@@ -4,14 +4,8 @@ import com.epam.library.model.*;
 
 import java.util.*;
 
-public interface BookService {
+public interface BookRepository {
     List<Book> getBooks();
 
     Book save(Book book);
-
-    interface BookRepository {
-        List<Book> getBooks();
-
-        Book save(Book book);
-    }
 }

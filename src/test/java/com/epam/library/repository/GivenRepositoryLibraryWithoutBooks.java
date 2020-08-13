@@ -1,7 +1,7 @@
 package com.epam.library.repository;
 
 import com.epam.library.model.*;
-import com.epam.library.service.BookService.*;
+import com.epam.library.service.*;
 import com.epam.library.util.*;
 
 import org.junit.jupiter.api.*;

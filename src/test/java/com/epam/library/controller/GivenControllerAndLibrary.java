@@ -35,7 +35,7 @@ class GivenControllerAndLibrary {
     protected MockMvc mvc;
 
     @MockBean
-    protected BookService.BookRepository repository;
+    protected BookRepository repository;
 
     @Test
     void listingBooks_should_returnInternalServerError_if_repositoryFails() throws Exception {

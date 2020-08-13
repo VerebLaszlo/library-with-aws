@@ -1,7 +1,7 @@
 package com.epam.library.repository.dynamo;
 
 import com.epam.library.model.*;
-import com.epam.library.service.BookService.*;
+import com.epam.library.service.*;
 
 import com.amazonaws.services.dynamodbv2.*;
 import com.amazonaws.services.dynamodbv2.datamodeling.*;

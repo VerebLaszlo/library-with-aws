@@ -8,20 +8,18 @@ import org.springframework.stereotype.*;
 import java.util.*;
 
 @Service
-public class BookServiceImpl implements BookService {
+class BookService {
     private final BookRepository bookRepository;
 
-    public BookServiceImpl(BookRepository bookRepository) {
+    BookService(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
 
-    @Override
-    public final List<Book> getBooks() {
+    final List<Book> getBooks() {
         return bookRepository.getBooks();
     }
 
-    @Override
-    public Book save(Book book) {
+    Book save(Book book) {
         return bookRepository.save(book);
     }
 }

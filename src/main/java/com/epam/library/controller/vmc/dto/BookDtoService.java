@@ -13,22 +13,22 @@ import static java.util.stream.Collectors.*;
 
 @Service
 public class BookDtoService {
-    private final BookService bookService;
+    private final BookFacade bookFacade;
 
-    public BookDtoService(BookService bookService) {
-        this.bookService = bookService;
+    public BookDtoService(BookFacade bookFacade) {
+        this.bookFacade = bookFacade;
     }
 
     public List<BookDto> getBooks() {
-        return convert(bookService.getBooks());
+        return convert(bookFacade.getBooks());
     }
 
-    private List<BookDto> convert(@NotNull Collection<? extends Book> books) {
-        return books.stream().map(this::convert).collect(toList());
+    private static List<BookDto> convert(@NotNull Collection<? extends Book> books) {
+        return books.stream().map(BookDtoService::convert).collect(toList());
     }
 
     @NotNull
-    private BookDto convert(Book book) {
+    private static BookDto convert(Book book) {
         return new BookDto(book.getTitle(), book.getAuthor(), book.getPublisher(), book.getIsbn(), book.getCoverUrl());
     }
 }

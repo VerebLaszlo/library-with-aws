@@ -14,21 +14,21 @@ import java.util.*;
 @RequestMapping("/api/v1/books")
 class BookRestController {
     private static final Logger LOG = LoggerFactory.getLogger(BookRestController.class);
-    private final BookService bookService;
+    private final BookFacade bookFacade;
 
-    BookRestController(BookService bookService) {
-        this.bookService = bookService;
+    BookRestController(BookFacade bookFacade) {
+        this.bookFacade = bookFacade;
     }
 
     @GetMapping
     public final List<Book> getBooks() {
-        return bookService.getBooks();
+        return bookFacade.getBooks();
     }
 
     @PostMapping
     public final ResponseEntity<Book> create(@RequestBody Book book) {
         try {
-            return ResponseEntity.ok(bookService.save(book));
+            return ResponseEntity.ok(bookFacade.save(book));
         } catch (IllegalArgumentException e) {
             LOG.error("Could not create book.", e);
             return ResponseEntity.badRequest().build();

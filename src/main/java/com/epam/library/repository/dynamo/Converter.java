@@ -11,13 +11,13 @@ import java.util.stream.*;
 
 @Component
 class Converter {
-    public List<Book> convert(@NotNull Iterable<? extends BookModel> all) {
+    List<Book> convert(@NotNull Iterable<? extends BookModel> all) {
         return StreamSupport.stream(all.spliterator(), false)
                             .map(this::convert)
                             .collect(Collectors.toList());
     }
 
-    public Book convert(@NotNull BookModel bookModel) {
+    Book convert(@NotNull BookModel bookModel) {
         return new Book(new Isbn(bookModel.getIsbn()),
                         bookModel.getTitle(),
                         bookModel.getAuthor(),
@@ -27,7 +27,7 @@ class Converter {
         );
     }
 
-    public BookModel convert(@NotNull Book book) {
+    BookModel convert(@NotNull Book book) {
         return new BookModel(book.getId().orElse(null),
                              book.getIsbn(),
                              book.getTitle(),

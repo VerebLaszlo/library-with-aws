@@ -29,6 +29,11 @@ public class Book {
         this.id = id;
     }
 
+    @NotNull
+    public Book withUrl(String coverUrl) {
+        return new Book(isbn, title, author, publisher, coverUrl, id);
+    }
+
     public Isbn getIsbn() {
         return isbn;
     }
