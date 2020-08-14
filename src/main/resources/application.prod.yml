@@ -1,6 +1,0 @@
-profile:
-  desc: Productin profile
-
-spring:
-  profiles:
-    active: prod

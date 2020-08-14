@@ -63,34 +63,38 @@ class DynamoDBConfig {
                                                      "Title " + i,
                                                      "Author " + i,
                                                      "Publisher " + i,
-                                                     format("img/book-%d.png", i)))
+                                                     buildCoverUrl(i)))
                         .collect(Collectors.toList());
+    }
+
+    private static String buildCoverUrl(int i) {
+        return format("/book-%d.png", i);
     }
 
     @Bean
     @Profile("!prod")
     public AmazonDynamoDB embeddedDynamoDB() {
         var amazonDynamoDB = DynamoDBEmbedded.create().amazonDynamoDB();
-        createTable(amazonDynamoDB);
+        createTable(amazonDynamoDB, readCapacity, writeCapacity);
         return amazonDynamoDB;
+    }
+
+    private static CreateTableResult createTable(@NotNull AmazonDynamoDB ddb, long readCapacity, long writeCapacity) {
+        return ddb.createTable(createTableCreationRequest(readCapacity, writeCapacity));
+    }
+
+    private static CreateTableRequest createTableCreationRequest(long readCapacity, long writeCapacity) {
+        return new CreateTableRequest()
+                .withTableName(BookModel.TABLE_NAME)
+                .withAttributeDefinitions(createAttributeDefinitions(BookModel.HASH_KEY_NAME))
+                .withKeySchema(createKeySchema(BookModel.HASH_KEY_NAME))
+                .withProvisionedThroughput(new ProvisionedThroughput(readCapacity, writeCapacity));
     }
 
     @Bean
     @Profile("prod")
     AWSCredentialsProvider ec2CredentialsProvider() {
         return InstanceProfileCredentialsProvider.getInstance();
-    }
-
-    private CreateTableResult createTable(AmazonDynamoDB ddb) {
-        return ddb.createTable(createTableCreationRequest(BookModel.TABLE_NAME, BookModel.HASH_KEY_NAME));
-    }
-
-    private CreateTableRequest createTableCreationRequest(String tableName, String hashKeyName) {
-        return new CreateTableRequest()
-                .withTableName(tableName)
-                .withAttributeDefinitions(createAttributeDefinitions(hashKeyName))
-                .withKeySchema(createKeySchema(hashKeyName))
-                .withProvisionedThroughput(new ProvisionedThroughput(readCapacity, writeCapacity));
     }
 
     @NotNull

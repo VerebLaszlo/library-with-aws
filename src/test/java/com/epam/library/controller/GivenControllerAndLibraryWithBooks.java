@@ -15,9 +15,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 class GivenControllerAndLibraryWithBooks extends GivenControllerAndLibrary {
     private static final Book BOOK_STUB = new Book(new Isbn("ISBN"), "Title", "Author", "Publisher", "/book-0.png");
     private static final String EXPECTED_BOOKS_IN_LIBRARY
-            = "[{\"id\":null,\"isbn\":\"ISBN\",\"title\":\"Title\",\"author\":\"Author\",\"publisher\":\"Publisher\",\"coverUrl\":\"/book-0.png\"}"
-            + ",{\"id\":null,\"isbn\":\"a\",\"title\":\"Title\",\"author\":\"Author\",\"publisher\":\"Publisher\",\"coverUrl\":\"/book-0.png\"}"
-            + ",{\"id\":null,\"isbn\":\"b\",\"title\":\"Title\",\"author\":\"Author\",\"publisher\":\"Publisher\",\"coverUrl\":\"/book-0.png\"}]";
+            = "[{\"id\":null,\"isbn\":\"ISBN\",\"title\":\"Title\",\"author\":\"Author\",\"publisher\":\"Publisher\",\"coverUrl\":\"img/book-0.png\"}"
+            + ",{\"id\":null,\"isbn\":\"a\",\"title\":\"Title\",\"author\":\"Author\",\"publisher\":\"Publisher\",\"coverUrl\":\"img/book-0.png\"}"
+            + ",{\"id\":null,\"isbn\":\"b\",\"title\":\"Title\",\"author\":\"Author\",\"publisher\":\"Publisher\",\"coverUrl\":\"img/book-0.png\"}]";
 
     @BeforeEach
     final void beforeEach() {

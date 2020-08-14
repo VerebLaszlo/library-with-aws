@@ -20,3 +20,6 @@ cloud:
 dynamo:
   readCapacity: 1000
   writeCapacity: 1000
+
+staticContent:
+  imageUrlPrefix: img/
