@@ -1,15 +1,15 @@
 # script parameters
-variable project_name {}
+variable project-name {}
 
 variable tags { type = map(string) }
 
 # configuration parameters
 variable region {}
 
-variable vpc_cidr {}
+variable vpc-cidr {}
 
-variable public_cidrs { type = list(string) }
+variable public-cidrs { type = list(string) }
 
-variable private_cidrs { type = list(string) }
+variable private-cidrs { type = list(string) }
 
-variable access_ip {}
+variable access-ip {}

@@ -1,23 +1,25 @@
+provider template {
+  version = "~>2.1"
+}
+
 # script parameters
-variable project_name {}
+variable project-name {}
 
 variable tags { type = map(string) }
 
 # configuration parameters
-variable region {
-  description = "The name of the AWS region to set up a network within"
-}
+variable region {}
 
-variable instance_type {}
+variable vpc-cidr {}
 
-variable ami_owner_ids { type = list(string) }
+variable public-cidrs { type = list(string) }
 
-variable ami_name_filter { type = list(string) }
+variable private-cidrs { type = list(string) }
 
-variable vpc_cidr {}
+variable access-ip {}
 
-variable public_cidrs { type = list(string) }
+variable image-id {}
 
-variable private_cidrs { type = list(string) }
+variable instance-type {}
 
-variable access_ip {}
+variable s3-bucket-name {}

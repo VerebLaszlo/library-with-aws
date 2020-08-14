@@ -1,4 +1,5 @@
-resource "aws_dynamodb_table" "books_table" {
+# Dynamo configuration
+resource aws_dynamodb_table books_table {
   provider = aws
   name = var.tableName
   billing_mode = "PROVISIONED"
@@ -22,15 +23,32 @@ resource "aws_dynamodb_table" "books_table" {
   tags = var.tags
 }
 
-resource "aws_appautoscaling_target" "books_table_read_target" {
+resource aws_dynamodb_table_item item {
+  table_name = aws_dynamodb_table.books_table.name
+  hash_key   = aws_dynamodb_table.books_table.hash_key
+
+  item = <<ITEM
+{
+  "id": {"S": "1"},
+  "title": {"S": "Title"},
+  "author": {"S": "Author"},
+  "publisher": {"S": "Publisher"},
+  "isbn": {"S": "ISBN-1234"}
+}
+ITEM
+}
+
+resource aws_appautoscaling_target books_table_read_target {
   max_capacity = 10
   min_capacity = 1
   resource_id = "table/${var.tableName}"
   scalable_dimension = "dynamodb:table:ReadCapacityUnits"
   service_namespace = "dynamodb"
+
+  depends_on = [aws_dynamodb_table.books_table]
 }
 
-resource "aws_appautoscaling_policy" "books_table_read_policy" {
+resource aws_appautoscaling_policy books_table_read_policy {
   name = "DynamoDBReadCapacityUtilization:${aws_appautoscaling_target.books_table_read_target.resource_id}"
   policy_type = "TargetTrackingScaling"
   resource_id = aws_appautoscaling_target.books_table_read_target.resource_id
@@ -45,15 +63,17 @@ resource "aws_appautoscaling_policy" "books_table_read_policy" {
   }
 }
 
-resource "aws_appautoscaling_target" "books_table_write_target" {
+resource aws_appautoscaling_target books_table_write_target {
   max_capacity = 10
   min_capacity = 1
   resource_id = "table/${var.tableName}"
   scalable_dimension = "dynamodb:table:WriteCapacityUnits"
   service_namespace = "dynamodb"
+
+  depends_on = [aws_dynamodb_table.books_table]
 }
 
-resource "aws_appautoscaling_policy" "books_table_write_policy" {
+resource aws_appautoscaling_policy books_table_write_policy {
   name = "DynamoDBWriteCapacityUtilization:${aws_appautoscaling_target.books_table_write_target.resource_id}"
   policy_type = "TargetTrackingScaling"
   resource_id = aws_appautoscaling_target.books_table_write_target.resource_id

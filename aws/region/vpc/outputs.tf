@@ -1,24 +1,12 @@
-//
-output vpc_region {
-  value = var.region
+# Outputs
+output id {
+  value = aws_vpc.vpc-main.id
 }
 
-output vpc_name {
-  value = lookup(aws_vpc.library.tags, "Name", "unknown")
+output public-subnet-ids {
+  value = module.public.subnet-ids
 }
 
-output private_sg_id {
-  value = aws_security_group.library_private.id
-}
-
-output private_subnet_ids {
-  value = aws_subnet.library_private.*.id
-}
-
-output public_sg_id {
-  value = aws_security_group.library_public.id
-}
-
-output public_subnet_ids {
-  value = aws_subnet.library_public.*.id
+output private-subnet-ids {
+  value = module.private.subnet-ids
 }
