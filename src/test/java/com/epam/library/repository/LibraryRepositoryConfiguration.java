@@ -16,7 +16,7 @@ import java.util.stream.*;
 import static java.lang.String.*;
 
 @TestConfiguration
-class LibraryRepositoryContentConfiguration {
+class LibraryRepositoryConfiguration {
     static final int NUMBER_OF_BOOKS = 5;
 
     @Autowired
@@ -27,11 +27,13 @@ class LibraryRepositoryContentConfiguration {
         new DynamoDBMapper(amazonDynamoDB).batchSave(generateBooks());
     }
 
+
     @NotNull
     private static List<BookModel> generateBooks() {
         return IntStream.range(0, NUMBER_OF_BOOKS)
-                        .mapToObj(i -> new BookModel(null,
-                                                     "Isbn " + i, "Title " + i,
+                        .mapToObj(i -> new BookModel(valueOf(i),
+                                                     "Isbn " + i,
+                                                     "Title " + i,
                                                      "Author " + i,
                                                      "Publisher " + i,
                                                      format("/book-%d.png", i)))

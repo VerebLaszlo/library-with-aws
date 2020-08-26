@@ -10,6 +10,6 @@ class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler 
 
     @ExceptionHandler(RuntimeException.class)
     protected final ResponseEntity<Object> handleConflict(RuntimeException ex, WebRequest request) {
-        return handleExceptionInternal(ex, "", new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
+        return handleExceptionInternal(ex, null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
 }

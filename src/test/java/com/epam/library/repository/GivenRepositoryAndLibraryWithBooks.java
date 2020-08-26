@@ -14,7 +14,7 @@ import static com.epam.library.util.LibraryAssertions.*;
 import static org.assertj.core.api.BDDAssumptions.*;
 
 @IntegrationTest
-@Import(LibraryRepositoryContentConfiguration.class)
+@Import(LibraryRepositoryConfiguration.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @DisplayNameGeneration(CamelCaseDisplayNameGenerator.class)
 class GivenRepositoryAndLibraryWithBooks {
@@ -28,7 +28,7 @@ class GivenRepositoryAndLibraryWithBooks {
     void listingBooks_should_returnBooks() {
         var result = repository.getBooks();
 
-        then(result).hasSize(LibraryRepositoryContentConfiguration.NUMBER_OF_BOOKS);
+        then(result).hasSize(LibraryRepositoryConfiguration.NUMBER_OF_BOOKS);
     }
 
     @Test
