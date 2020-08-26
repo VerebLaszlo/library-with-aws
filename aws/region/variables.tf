@@ -23,3 +23,5 @@ variable image-id {}
 variable instance-type {}
 
 variable s3-bucket-name {}
+
+variable cloudfront-domain-name {}

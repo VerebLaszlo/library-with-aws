@@ -30,10 +30,11 @@ resource aws_dynamodb_table_item item {
   item = <<ITEM
 {
   "id": {"S": "1"},
+  "isbn": {"S": "ISBN-1234"},
   "title": {"S": "Title"},
   "author": {"S": "Author"},
   "publisher": {"S": "Publisher"},
-  "isbn": {"S": "ISBN-1234"}
+  "coverUrl": {"S": "/book-0.png"}
 }
 ITEM
 }

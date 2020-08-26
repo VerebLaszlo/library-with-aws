@@ -7,4 +7,3 @@ spring:
 
 staticContent:
   imageUrlPrefix: ${LIBRARY_CLOUDFRONT}/
-#  imageUrlPrefix: https://d1pp0mqppjlcbv.cloudfront.net/img/

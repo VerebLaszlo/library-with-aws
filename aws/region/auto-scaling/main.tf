@@ -14,6 +14,7 @@ resource aws_key_pair library {
 data template_file provision {
   vars = {
     s3_bucket_name = var.s3-bucket-name
+    cloudfront_domain_name = var.cloudfront-domain-name
   }
   template = file("${path.module}/provision.sh")
 }

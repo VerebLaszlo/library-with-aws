@@ -3,12 +3,6 @@ spring:
     name: library
   profiles:
     active: prod
-  mvc:
-    view:
-      prefix: /WEB-INF/jsp/
-      suffix: .jsp
-    resources:
-
 
 cloud:
   aws:

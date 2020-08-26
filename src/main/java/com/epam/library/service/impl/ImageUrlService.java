@@ -5,6 +5,9 @@ import org.springframework.stereotype.*;
 
 @Service
 class ImageUrlService {
+    // TODO: 20. 08. 24. log error, if not set
+    //     @Autowired
+    //     private Environment environment;
     @Value("${staticContent.imageUrlPrefix}")
     private String imageUrlPrefix;
 

@@ -34,6 +34,7 @@ module auto-scaling {
   image-id = var.image-id
   instance-type = var.instance-type
   s3-bucket-name = var.s3-bucket-name
+  cloudfront-domain-name = var.cloudfront-domain-name
   subnet-ids = module.vpc.private-subnet-ids
   dep-target-group = module.load-balancer.dep-target-group
   ec2-instance-profile = module.iam.ec2-instance-profile-name

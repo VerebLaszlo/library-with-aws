@@ -11,6 +11,46 @@ resource aws_s3_bucket library-learning {
   tags = var.tags
 }
 
+locals {
+  origin-path = "/static"
+  origin-id = "S3-library-learning${local.origin-path}"
+}
+
+resource aws_cloudfront_distribution cfd-images {
+  enabled = true
+  price_class = "PriceClass_100"
+  is_ipv6_enabled = true
+  viewer_certificate {
+    cloudfront_default_certificate = true
+  }
+  origin {
+    domain_name = aws_s3_bucket.library-learning.bucket_domain_name
+    origin_id = local.origin-id
+    origin_path = local.origin-path
+  }
+  restrictions {
+    geo_restriction {
+      restriction_type = "none"
+    }
+  }
+  default_cache_behavior {
+    allowed_methods = ["GET", "HEAD"]
+    cached_methods = ["GET", "HEAD"]
+    default_ttl = 300
+    max_ttl = 600
+    target_origin_id = local.origin-id
+    viewer_protocol_policy = "allow-all"
+    forwarded_values {
+      query_string = false
+      cookies {
+        forward = "none"
+      }
+    }
+  }
+
+  tags = var.tags
+}
+
 module us-east-1 {
   source = "./region"
   project-name = var.project-name
@@ -24,6 +64,7 @@ module us-east-1 {
   private-cidrs = var.private-cidrs
   access-ip = var.access-ip
   s3-bucket-name = aws_s3_bucket.library-learning.bucket
+  cloudfront-domain-name = aws_cloudfront_distribution.cfd-images.domain_name
 
   providers = {
     aws = aws.us-east-1

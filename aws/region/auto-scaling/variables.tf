@@ -8,6 +8,8 @@ variable vpc-id {}
 
 variable s3-bucket-name {}
 
+variable cloudfront-domain-name {}
+
 variable image-id {}
 
 variable instance-type {}
