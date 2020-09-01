@@ -6,9 +6,9 @@
 
     <groupId>com.epam</groupId>
     <artifactId>library</artifactId>
-    <version>1.1-RELEASE</version>
+    <version>1.2-RELEASE</version>
 
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
     <name>Library</name>
     <description>Example project using Spring REST and AWS.</description>
     <developers>
@@ -17,6 +17,13 @@
             <email>Laszlo_Vereb@epam.com</email>
         </developer>
     </developers>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.3.3.RELEASE</version>
+        <relativePath/>
+    </parent>
 
     <distributionManagement>
         <repository>
@@ -49,13 +56,17 @@
         <!--endregion-->
 
         <!--region dependencies-->
-        <spring.version>2.3.1.RELEASE</spring.version>
         <jstl.version>1.2</jstl.version>
         <servlet.version>4.0.1</servlet.version>
         <jasper.version>9.0.36</jasper.version>
         <mockito-core.version>3.4.6</mockito-core.version>
         <jetbrains.annotations.version>[19.0.0, 20.0.0)</jetbrains.annotations.version>
-        <aws.java.sdk.version>[1.11.807, 2.0.0)</aws.java.sdk.version>
+        <aws.java.sdk.version>1.11.780</aws.java.sdk.version>
+<!--        <aws.java.sdk.version>1.11.851</aws.java.sdk.version>-->
+        <sqlite4java.version>1.0.392</sqlite4java.version>
+        <slf4j-api.version>1.7.30</slf4j-api.version>
+        <log4j.version>2.13.3</log4j.version>
+        <jackson.version>2.11.2</jackson.version>
         <!--endregion-->
 
         <!--region test dependencies-->
@@ -64,72 +75,163 @@
     </properties>
     <dependencyManagement>
         <dependencies>
+            <!--region implementation-->
+            <dependency>
+                <groupId>org.jetbrains</groupId>
+                <artifactId>annotations</artifactId>
+                <version>${jetbrains.annotations.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.amazonaws</groupId>
+                <artifactId>aws-java-sdk-dynamodb</artifactId>
+                <version>${aws.java.sdk.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.amazonaws</groupId>
+                <artifactId>DynamoDBLocal</artifactId>
+                <version>${aws.dynamodblocal.version}</version>
+            </dependency>
+            <!--endregion-->
+            <!--region web-->
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>${servlet.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>jstl</artifactId>
+                <version>${jstl.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.tomcat.embed</groupId>
+                <artifactId>tomcat-embed-jasper</artifactId>
+                <version>${jasper.version}</version>
+            </dependency>
+            <!--endregion-->
+            <!--region logging-->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-api</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-core</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+            <!--endregion-->
+            <!--region serialization-->
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.dataformat</groupId>
+                <artifactId>jackson-dataformat-yaml</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <!--endregion-->
+            <!--region development & test-->
+            <dependency>
+                <groupId>com.almworks.sqlite4java</groupId>
+                <artifactId>sqlite4java</artifactId>
+                <version>${sqlite4java.version}</version>
+            </dependency>
+            <!--endregion-->
+            <!--region testing-->
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-core</artifactId>
                 <version>${mockito-core.version}</version>
                 <scope>test</scope>
             </dependency>
+            <!--endregion-->
         </dependencies>
     </dependencyManagement>
     <dependencies>
-        <!--region spring web -->
+        <!--region web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <version>${spring.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-log4j2</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <!---->
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>${servlet.version}</version>
-        </dependency><!--
-        -->
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>jstl</artifactId>
-            <version>${jstl.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-jasper</artifactId>
-            <version>${jasper.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
         </dependency>
         <!--endregion-->
-
-        <!--region implementation dependencies-->
+        <!--region implementation-->
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>${jetbrains.annotations.version}</version>
         </dependency>
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-dynamodb</artifactId>
-            <version>${aws.java.sdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-yaml</artifactId>
         </dependency>
         <!--endregion-->
-
         <!--region development & test-->
         <!-- TODO do not include on prod env -->
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>DynamoDBLocal</artifactId>
-            <version>${aws.dynamodblocal.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.almworks.sqlite4java</groupId>
+            <artifactId>sqlite4java</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
         </dependency>
         <!--endregion-->
-
         <!--region test dependencies-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <version>${spring.version}</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
@@ -159,7 +261,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring.version}</version>
                 <configuration>
                     <executable>true</executable>
                     <jvmArguments>
