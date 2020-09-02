@@ -2,7 +2,7 @@
 resource aws_s3_bucket library-learning {
   bucket = "library-learning"
   region = var.region
-  force_destroy = false
+  force_destroy = true
   versioning {
     enabled = true
     mfa_delete = false
@@ -11,9 +11,30 @@ resource aws_s3_bucket library-learning {
   tags = var.tags
 }
 
+resource aws_s3_bucket_object library-log-file {
+  bucket = aws_s3_bucket.library-learning.bucket
+  key = "release/log4j2.yaml"
+  content = "./log4j2.yaml"
+  acl = "public-read"
+
+  tags = var.tags
+}
+
 locals {
+  local-image-path = "${path.cwd}/../src/main/webapp/WEB-INF/static/"
   origin-path = "/static"
   origin-id = "S3-library-learning${local.origin-path}"
+  bucket = ""
+  key = ""
+}
+
+resource aws_s3_bucket_object static-resources {
+  for_each = fileset(local.local-image-path, "**/*.*")
+  bucket = aws_s3_bucket.library-learning.bucket
+  key = "static/${each.value}"
+  source = "${local.local-image-path}${each.value}"
+  acl = "public-read"
+  tags = var.tags
 }
 
 resource aws_cloudfront_distribution cfd-images {
@@ -47,6 +68,24 @@ resource aws_cloudfront_distribution cfd-images {
       }
     }
   }
+
+  tags = var.tags
+}
+
+data template_file run-library {
+  vars = {
+    s3_bucket_name = aws_s3_bucket.library-learning.bucket
+    cloudfront_domain_name = aws_cloudfront_distribution.cfd-images.domain_name
+  }
+  template = file("run-library.sh")
+}
+
+resource aws_s3_bucket_object run-library {
+  bucket = aws_s3_bucket.library-learning.bucket
+  key = "release/run-library.sh"
+  content = data.template_file.run-library.rendered
+  acl = "public-read"
+  depends_on = [data.template_file.run-library]
 
   tags = var.tags
 }
@@ -92,102 +131,3 @@ module us-west-2 {
 }
 */
 
-/*resource aws_cloudfront_distribution library {
-  enabled = true
-  is_ipv6_enabled = false
-  comment = "Testing comment"
-  price_class = "PriceClass_100"
-  retain_on_delete = false*/
-  /*
-    origin_group {
-      failover_criteria {
-        status_codes = [
-          403,
-          404,
-          500,
-          502,
-          503,
-          504
-        ]
-      }
-      member {
-        origin_id = module.us-east-1.lb_id
-      }
-      member {
-        origin_id = module.us-west-2.lb_id
-      }
-      origin_id = local.origin_group_id
-    }
-  */
-/*  origin {
-    custom_origin_config {
-      http_port = 80
-      https_port = 443
-      origin_keepalive_timeout = 5
-      origin_protocol_policy = "http-only"
-      origin_read_timeout = 30
-      origin_ssl_protocols = [
-        "TLSv1",
-        "TLSv1.1",
-        "TLSv1.2"
-      ]
-    }
-    domain_name = "library-public-lb-1302643233.us-east-1.elb.amazonaws.com"
-//    origin_id = module.us-east-1.lb_id
-  }*/
-  /*
-    origin {
-      custom_origin_config {
-        http_port = 80
-        https_port = 443
-        origin_keepalive_timeout = 5
-        origin_protocol_policy = "http-only"
-        origin_read_timeout = 30
-        origin_ssl_protocols = [
-          "TLSv1",
-          "TLSv1.1",
-          "TLSv1.2"
-        ]
-      }
-      domain_name = "library-public-lb-607108992.us-west-2.elb.amazonaws.com"
-      origin_id = module.us-west-2.lb_id
-    }
-  */
-/*
-  restrictions {
-    geo_restriction {
-      locations = []
-      restriction_type = "none"
-    }
-  }
-  viewer_certificate {
-    cloudfront_default_certificate = true
-    minimum_protocol_version = "TLSv1"
-  }
-  default_cache_behavior {
-    allowed_methods = [
-      "GET",
-      "HEAD"
-    ]
-    cached_methods = [
-      "GET",
-      "HEAD"
-    ]
-    compress = false
-    default_ttl = 86400
-    forwarded_values {
-      cookies {
-        forward = "none"
-        whitelisted_names = []
-      }
-      headers = []
-      query_string = false
-    }
-    //    target_origin_id = local.origin_group_id
-//    target_origin_id = module.us-east-1.lb_id
-    viewer_protocol_policy = "allow-all"
-  }
-
-  tags = var.tags
-}
-*/
