@@ -23,7 +23,7 @@ public class BookDtoService {
         return convert(bookFacade.getBooks());
     }
 
-    private static List<BookDto> convert(@NotNull Collection<? extends Book> books) {
+    private static List<BookDto> convert(@NotNull Collection<Book> books) {
         return books.stream().map(BookDtoService::convert).collect(toList());
     }
 

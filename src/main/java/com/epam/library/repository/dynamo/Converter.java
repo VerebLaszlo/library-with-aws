@@ -17,23 +17,21 @@ class Converter {
                             .collect(Collectors.toList());
     }
 
-    Book convert(@NotNull BookModel bookModel) {
-        return new Book(new Isbn(bookModel.getIsbn()),
-                        bookModel.getTitle(),
-                        bookModel.getAuthor(),
-                        bookModel.getPublisher(),
-                        bookModel.getCoverUrl(),
-                        bookModel.getId()
-        );
+    Book convert(@NotNull BookModel book) {
+        return Book.builder(new Isbn(book.getIsbn()),
+                            book.getTitle(),
+                            book.getAuthor(),
+                            book.getPublisher(),
+                            book.getCoverUrl())
+                   .withId(book.getId()).build();
     }
 
     BookModel convert(@NotNull Book book) {
-        return new BookModel(book.getId().orElse(null),
-                             book.getIsbn(),
-                             book.getTitle(),
-                             book.getAuthor(),
-                             book.getPublisher(),
-                             book.getCoverUrl()
-        );
+        return BookModel.builder(book.getIsbn().getNumber(),
+                                 book.getTitle(),
+                                 book.getAuthor(),
+                                 book.getPublisher(),
+                                 book.getCoverUrl())
+                        .withId(book.getId().orElse(null)).build();
     }
 }

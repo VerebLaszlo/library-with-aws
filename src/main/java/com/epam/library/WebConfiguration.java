@@ -17,7 +17,7 @@ import java.util.*;
 
 @EnableWebMvc
 @Configuration
-public class WebConfiguration implements WebMvcConfigurer {
+class WebConfiguration implements WebMvcConfigurer {
 
     @Autowired
     private ObjectMapper objectMapper;

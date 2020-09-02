@@ -3,11 +3,16 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.3.3.RELEASE</version>
+        <relativePath/>
+    </parent>
 
     <groupId>com.epam</groupId>
     <artifactId>library</artifactId>
     <version>1.2-RELEASE</version>
-
     <packaging>war</packaging>
     <name>Library</name>
     <description>Example project using Spring REST and AWS.</description>
@@ -17,13 +22,6 @@
             <email>Laszlo_Vereb@epam.com</email>
         </developer>
     </developers>
-
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.3.RELEASE</version>
-        <relativePath/>
-    </parent>
 
     <distributionManagement>
         <repository>

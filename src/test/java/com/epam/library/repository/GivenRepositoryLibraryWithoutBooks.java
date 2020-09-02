@@ -17,8 +17,8 @@ import static org.assertj.core.api.BDDAssumptions.*;
 @DisplayNameGeneration(CamelCaseDisplayNameGenerator.class)
 class GivenRepositoryLibraryWithoutBooks {
 
-
-    private static final Book BOOK_STUB = new Book(new Isbn("Isdb"), "Title", "Author", "Publisher", "/book-0.png");
+    private static final Book BOOK_STUB = Book.builder(new Isbn("Isdb"), "Title", "Author", "Publisher", "/book-0.png")
+                                              .build();
     @Autowired
     private BookRepository repository;
 

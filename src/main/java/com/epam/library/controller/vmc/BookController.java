@@ -8,7 +8,7 @@ import org.springframework.web.servlet.*;
 
 @Controller
 @RequestMapping("/books")
-public class BookController {
+class BookController {
     private static final String VIEW_NAME = "booksDetails";
     private static final String MODEL_NAME = "books";
 

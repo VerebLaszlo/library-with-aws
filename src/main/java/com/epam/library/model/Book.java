@@ -4,7 +4,7 @@ import org.jetbrains.annotations.*;
 
 import java.util.*;
 
-public class Book {
+public final class Book {
     private final @Nullable String id;
     private final Isbn isbn;
     private final String title;
@@ -12,25 +12,21 @@ public class Book {
     private final String publisher;
     private final String coverUrl;
 
-    private Book() {
-        this(new Isbn(""), "", "", "", "");
-    }
-
-    public Book(Isbn isbn, String title, String author, String publisher, String coverUrl) {
-        this(isbn, title, author, publisher, coverUrl, null);
-    }
-
-    public Book(Isbn isbn, String title, String author, String publisher, String coverUrl, @Nullable String id) {
+    private Book(Isbn isbn, String title, String author, String publisher, String coverUrl, @Nullable String id) {
+        this.isbn = isbn;
         this.title = title;
         this.author = author;
         this.publisher = publisher;
-        this.isbn = isbn;
         this.coverUrl = coverUrl;
         this.id = id;
     }
 
+    public static Book.Builder builder(Isbn isbn, String title, String author, String publisher, String coverUrl) {
+        return new Builder(isbn, title, author, publisher, coverUrl);
+    }
+
     @NotNull
-    public Book withUrl(String coverUrl) {
+    public Book copyWithUrl(String coverUrl) {
         return new Book(isbn, title, author, publisher, coverUrl, id);
     }
 
@@ -78,5 +74,31 @@ public class Book {
     public String toString() {
         return String.format("Book{id='%s', isbn=%s, title='%s', author='%s', publisher='%s', coverUrl='%s'}",
                              id, isbn, title, author, publisher, coverUrl);
+    }
+
+    public static final class Builder {
+        private final Isbn isbn;
+        private final String title;
+        private final String author;
+        private final String publisher;
+        private final String coverUrl;
+        private @Nullable String id;
+
+        private Builder(Isbn isbn, String title, String author, String publisher, String coverUrl) {
+            this.isbn = isbn;
+            this.title = title;
+            this.author = author;
+            this.publisher = publisher;
+            this.coverUrl = coverUrl;
+        }
+
+        public Builder withId(@Nullable String id) {
+            this.id = id;
+            return this;
+        }
+
+        public Book build() {
+            return new Book(isbn, title, author, publisher, coverUrl, id);
+        }
     }
 }

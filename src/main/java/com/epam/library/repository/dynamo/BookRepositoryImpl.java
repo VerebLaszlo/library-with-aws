@@ -15,7 +15,7 @@ import static java.util.Collections.*;
 import static org.slf4j.LoggerFactory.*;
 
 @Repository
-public class BookRepositoryImpl implements BookRepository {
+final class BookRepositoryImpl implements BookRepository {
     private static final Logger LOG = getLogger(BookRepositoryImpl.class);
 
     private final Converter converter;

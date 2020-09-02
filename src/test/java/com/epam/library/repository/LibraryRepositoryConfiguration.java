@@ -31,12 +31,11 @@ class LibraryRepositoryConfiguration {
     @NotNull
     private static List<BookModel> generateBooks() {
         return IntStream.range(0, NUMBER_OF_BOOKS)
-                        .mapToObj(i -> new BookModel(valueOf(i),
-                                                     "Isbn " + i,
-                                                     "Title " + i,
-                                                     "Author " + i,
-                                                     "Publisher " + i,
-                                                     format("/book-%d.png", i)))
+                        .mapToObj(i -> BookModel.builder("Isbn " + i,
+                                                         "Title " + i,
+                                                         "Author " + i,
+                                                         "Publisher " + i,
+                                                         format("/book-%d.png", i)).withId(valueOf(i)).build())
                         .collect(Collectors.toList());
     }
 }

@@ -22,7 +22,7 @@ public class BookFacadeImpl implements BookFacade {
     @Override
     public List<Book> getBooks() {
         return bookService.getBooks().stream()
-                          .map(book -> book.withUrl(imageUrlService.prefix(book.getCoverUrl())))
+                          .map(book -> book.copyWithUrl(imageUrlService.prefix(book.getCoverUrl())))
                           .collect(toList());
     }
 

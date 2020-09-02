@@ -1,6 +1,5 @@
 package com.epam.library.repository.dynamo;
 
-import com.epam.library.model.*;
 import com.epam.library.util.*;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
@@ -22,12 +21,12 @@ public class BookModel {
     private String publisher;
     private String coverUrl;
 
+    // public is needed for DynamoDB
     public BookModel() {
-        this(null, "", "", "", "", "");
+        this("", "", "", "", "");
     }
 
-    public BookModel(@Nullable String id, String isbn, String title, String author, String publisher, String coverUrl) {
-        this.id = id;
+    private BookModel(String isbn, String title, String author, String publisher, String coverUrl) {
         this.isbn = isbn;
         this.title = title;
         this.author = author;
@@ -35,13 +34,12 @@ public class BookModel {
         this.coverUrl = coverUrl;
     }
 
-    public BookModel(@Nullable String id, Isbn isbn, String title, String author, String publisher, String coverUrl) {
-        this.id = id;
-        this.isbn = isbn.getNumber();
-        this.title = title;
-        this.author = author;
-        this.publisher = publisher;
-        this.coverUrl = coverUrl;
+    public static BookModel.Builder builder(String isbn,
+                                            String title,
+                                            String author,
+                                            String publisher,
+                                            String coverUrl) {
+        return new Builder(isbn, title, author, publisher, coverUrl);
     }
 
     public @Nullable String getId() {
@@ -92,14 +90,14 @@ public class BookModel {
         this.coverUrl = coverUrl;
     }
 
-    @SuppressWarnings("NonFinalFieldReferencedInHashCode")
+    @SuppressWarnings({"NonFinalFieldReferencedInHashCode", "DuplicateStringLiteralInspection"})
     @Justification("Setters are required, finals can not be used")
     @Override
     public int hashCode() {
         return Objects.hash(title, author, publisher, isbn);
     }
 
-    @SuppressWarnings("NonFinalFieldReferenceInEquals")
+    @SuppressWarnings({"NonFinalFieldReferenceInEquals", "DuplicateStringLiteralInspection"})
     @Justification("Setters are required, finals can not be used")
     @Override
     public boolean equals(Object obj) {
@@ -116,5 +114,33 @@ public class BookModel {
     public String toString() {
         return String.format("BookModel{id='%s', isbn='%s', title='%s', author='%s', publisher='%s', coverUrl='%s'}",
                              id, isbn, title, author, publisher, coverUrl);
+    }
+
+    public static final class Builder {
+        private final String isbn;
+        private final String title;
+        private final String author;
+        private final String publisher;
+        private final String coverUrl;
+        private @Nullable String id;
+
+        private Builder(String isbn, String title, String author, String publisher, String coverUrl) {
+            this.isbn = isbn;
+            this.title = title;
+            this.author = author;
+            this.publisher = publisher;
+            this.coverUrl = coverUrl;
+        }
+
+        public Builder withId(@Nullable String id) {
+            this.id = id;
+            return this;
+        }
+
+        public BookModel build() {
+            BookModel bookModel = new BookModel(isbn, title, author, publisher, coverUrl);
+            bookModel.setId(id);
+            return bookModel;
+        }
     }
 }

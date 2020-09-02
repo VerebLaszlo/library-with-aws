@@ -74,8 +74,7 @@ resource aws_cloudfront_distribution cfd-images {
 
 data template_file run-library {
   vars = {
-    s3_bucket_name = aws_s3_bucket.library-learning.bucket
-    cloudfront_domain_name = aws_cloudfront_distribution.cfd-images.domain_name
+    S3_BUCKET_NAME = aws_s3_bucket.library-learning.bucket
   }
   template = file("run-library.sh")
 }

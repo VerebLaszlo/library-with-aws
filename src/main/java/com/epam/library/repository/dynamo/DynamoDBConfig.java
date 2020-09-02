@@ -58,12 +58,11 @@ class DynamoDBConfig {
     @NotNull
     private static List<BookModel> generateBooks() {
         return IntStream.range(0, NUMBER_OF_BOOKS)
-                        .mapToObj(i -> new BookModel(null,
-                                                     "Isbn " + i,
-                                                     "Title " + i,
-                                                     "Author " + i,
-                                                     "Publisher " + i,
-                                                     buildCoverUrl(i)))
+                        .mapToObj(i -> BookModel.builder(format("Isbn %d", i),
+                                                         format("Title %d", i),
+                                                         format("Author %d", i),
+                                                         format("Publisher %d", i),
+                                                         buildCoverUrl(i)).build())
                         .collect(Collectors.toList());
     }
 
@@ -86,8 +85,8 @@ class DynamoDBConfig {
     private static CreateTableRequest createTableCreationRequest(long readCapacity, long writeCapacity) {
         return new CreateTableRequest()
                 .withTableName(BookModel.TABLE_NAME)
-                .withAttributeDefinitions(createAttributeDefinitions(BookModel.HASH_KEY_NAME))
-                .withKeySchema(createKeySchema(BookModel.HASH_KEY_NAME))
+                .withAttributeDefinitions(createAttributeDefinitions())
+                .withKeySchema(createKeySchema())
                 .withProvisionedThroughput(new ProvisionedThroughput(readCapacity, writeCapacity));
     }
 
@@ -98,13 +97,13 @@ class DynamoDBConfig {
     }
 
     @NotNull
-    private static List<AttributeDefinition> createAttributeDefinitions(String hashKeyName) {
-        return List.of(new AttributeDefinition(hashKeyName, ScalarAttributeType.S));
+    private static List<AttributeDefinition> createAttributeDefinitions() {
+        return List.of(new AttributeDefinition(BookModel.HASH_KEY_NAME, ScalarAttributeType.S));
     }
 
     @NotNull
-    private static List<KeySchemaElement> createKeySchema(String hashKeyName) {
-        return List.of(new KeySchemaElement(hashKeyName, KeyType.HASH));
+    private static List<KeySchemaElement> createKeySchema() {
+        return List.of(new KeySchemaElement(BookModel.HASH_KEY_NAME, KeyType.HASH));
     }
     //endregion
 }

@@ -2,14 +2,17 @@ package com.epam.library.service.impl;
 
 import org.slf4j.*;
 
+import org.springframework.stereotype.*;
+
 import java.net.*;
 
 import static org.slf4j.LoggerFactory.*;
 
-public class UrlService {
+@Service
+class UrlService {
     private static final Logger LOG = getLogger(UrlService.class);
 
-    public static String normalizeUrlOrDefaultTo(String url) {
+    String normalizeUrlOrDefaultTo(String url) {
         try {
             return new URI(url).normalize().toString();
         } catch (URISyntaxException e) {

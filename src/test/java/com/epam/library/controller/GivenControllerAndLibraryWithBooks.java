@@ -13,11 +13,15 @@ import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 class GivenControllerAndLibraryWithBooks extends GivenControllerAndLibrary {
-    private static final Book BOOK_STUB = new Book(new Isbn("ISBN"), "Title", "Author", "Publisher", "/book-0.png");
+    private static final Book BOOK_STUB = Book.builder(new Isbn("ISBN"), "Title", "Author", "Publisher", "/book-0.png")
+                                              .build();
     private static final String EXPECTED_BOOKS_IN_LIBRARY
-            = "[{\"id\":null,\"isbn\":\"ISBN\",\"title\":\"Title\",\"author\":\"Author\",\"publisher\":\"Publisher\",\"coverUrl\":\"img/book-0.png\"}"
-            + ",{\"id\":null,\"isbn\":\"a\",\"title\":\"Title\",\"author\":\"Author\",\"publisher\":\"Publisher\",\"coverUrl\":\"img/book-0.png\"}"
-            + ",{\"id\":null,\"isbn\":\"b\",\"title\":\"Title\",\"author\":\"Author\",\"publisher\":\"Publisher\",\"coverUrl\":\"img/book-0.png\"}]";
+            = "[{\"id\":null,\"isbn\":\"ISBN\",\"title\":\"Title\",\"author\":\"Author\",\"publisher\":\"Publisher\""
+              + ",\"coverUrl\":\"img/book-0.png\"}"
+              + ",{\"id\":null,\"isbn\":\"a\",\"title\":\"Title\",\"author\":\"Author\",\"publisher\":\"Publisher\""
+              + ",\"coverUrl\":\"img/book-0.png\"}"
+              + ",{\"id\":null,\"isbn\":\"b\",\"title\":\"Title\",\"author\":\"Author\",\"publisher\":\"Publisher\","
+              + "\"coverUrl\":\"img/book-0.png\"}]";
 
     @BeforeEach
     final void beforeEach() {
@@ -66,8 +70,11 @@ class GivenControllerAndLibraryWithBooks extends GivenControllerAndLibrary {
 
     //region helper functions
     static Book withIsbn(Book bookStub, String isbn) {
-        return new Book(new Isbn(isbn), bookStub.getTitle(), bookStub.getAuthor(), bookStub.getPublisher(),
-                        bookStub.getCoverUrl());
+        return Book.builder(new Isbn(isbn),
+                            bookStub.getTitle(),
+                            bookStub.getAuthor(),
+                            bookStub.getPublisher(),
+                            bookStub.getCoverUrl()).build();
     }
     //endregion
 }
