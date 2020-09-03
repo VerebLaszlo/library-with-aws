@@ -6,4 +6,4 @@ spring:
     active: prod
 
 staticContent:
-  imageUrlPrefix: ${LIBRARY_CLOUDFRONT}/
+  imageUrlPrefix: ${LIBRARY_CLOUDFRONT}

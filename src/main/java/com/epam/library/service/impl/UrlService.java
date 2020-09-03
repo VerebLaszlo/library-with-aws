@@ -5,6 +5,7 @@ import org.slf4j.*;
 import org.springframework.stereotype.*;
 
 import java.net.*;
+import java.util.*;
 
 import static org.slf4j.LoggerFactory.*;
 
@@ -12,12 +13,13 @@ import static org.slf4j.LoggerFactory.*;
 class UrlService {
     private static final Logger LOG = getLogger(UrlService.class);
 
-    String normalizeUrlOrDefaultTo(String url) {
+    Optional<String> normalizeUrl(String ...urlComponents) {
+        String urlString = String.join("/", urlComponents);
         try {
-            return new URI(url).normalize().toString();
+            return Optional.of(new URI(urlString).normalize().toString());
         } catch (URISyntaxException e) {
             LOG.error("Wrong URL format.", e);
         }
-        return url;
+        return Optional.empty();
     }
 }

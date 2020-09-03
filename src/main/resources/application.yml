@@ -16,4 +16,4 @@ dynamo:
   writeCapacity: 1000
 
 staticContent:
-  imageUrlPrefix: img/
+  imageUrlPrefix:

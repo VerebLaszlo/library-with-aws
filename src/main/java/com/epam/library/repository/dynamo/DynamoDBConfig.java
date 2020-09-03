@@ -62,12 +62,8 @@ class DynamoDBConfig {
                                                          format("Title %d", i),
                                                          format("Author %d", i),
                                                          format("Publisher %d", i),
-                                                         buildCoverUrl(i)).build())
+                                                         format("/book-%d.png", i)).build())
                         .collect(Collectors.toList());
-    }
-
-    private static String buildCoverUrl(int i) {
-        return format("/book-%d.png", i);
     }
 
     @Bean

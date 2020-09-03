@@ -2,7 +2,7 @@ package com.epam.library.controller.vmc.dto;
 
 import com.epam.library.model.*;
 
-// public is needed for javax to find properties
+// WARN public is needed for javax to find properties
 public class BookDto {
     private final String title;
     private final String author;

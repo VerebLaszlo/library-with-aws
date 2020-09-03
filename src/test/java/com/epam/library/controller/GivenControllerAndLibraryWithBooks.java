@@ -17,11 +17,11 @@ class GivenControllerAndLibraryWithBooks extends GivenControllerAndLibrary {
                                               .build();
     private static final String EXPECTED_BOOKS_IN_LIBRARY
             = "[{\"id\":null,\"isbn\":\"ISBN\",\"title\":\"Title\",\"author\":\"Author\",\"publisher\":\"Publisher\""
-              + ",\"coverUrl\":\"img/book-0.png\"}"
+              + ",\"coverUrl\":\"/img/book-0.png\"}"
               + ",{\"id\":null,\"isbn\":\"a\",\"title\":\"Title\",\"author\":\"Author\",\"publisher\":\"Publisher\""
-              + ",\"coverUrl\":\"img/book-0.png\"}"
+              + ",\"coverUrl\":\"/img/book-0.png\"}"
               + ",{\"id\":null,\"isbn\":\"b\",\"title\":\"Title\",\"author\":\"Author\",\"publisher\":\"Publisher\","
-              + "\"coverUrl\":\"img/book-0.png\"}]";
+              + "\"coverUrl\":\"/img/book-0.png\"}]";
 
     @BeforeEach
     final void beforeEach() {

@@ -3,10 +3,10 @@ package com.epam.library.service.impl;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 
-import static java.lang.String.*;
-
 @Service
 class ImageUrlService {
+    private static final String IMG_URL_INFIX = "img";
+
     private final UrlService urlService;
 
     // TODO: 20. 08. 24. log error, if not set
@@ -17,7 +17,7 @@ class ImageUrlService {
         this.urlService = urlService;
     }
 
-    String prefix(String url) {
-        return urlService.normalizeUrlOrDefaultTo(format("%s%s", imageUrlPrefix, url));
+    String prefix(String imageUrl) {
+        return urlService.normalizeUrl(imageUrlPrefix, IMG_URL_INFIX, imageUrl).orElse(imageUrl);
     }
 }

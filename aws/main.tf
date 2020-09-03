@@ -76,7 +76,7 @@ data template_file run-library {
   vars = {
     S3_BUCKET_NAME = aws_s3_bucket.library-learning.bucket
   }
-  template = file("run-library.sh")
+  template = replace(file("run-library.sh"), "\r\n", "\n")
 }
 
 resource aws_s3_bucket_object run-library {
