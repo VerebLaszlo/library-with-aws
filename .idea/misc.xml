@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="EntryPointsManager">
-    <list size="6">
-      <item index="0" class="java.lang.String" itemvalue="org.springframework.boot.test.mock.mockito.MockBean" />
-      <item index="1" class="java.lang.String" itemvalue="org.springframework.context.annotation.Bean" />
-      <item index="2" class="java.lang.String" itemvalue="org.springframework.stereotype.Service" />
-      <item index="3" class="java.lang.String" itemvalue="org.springframework.web.bind.annotation.ExceptionHandler" />
-      <item index="4" class="java.lang.String" itemvalue="org.springframework.web.bind.annotation.PostMapping" />
-      <item index="5" class="java.lang.String" itemvalue="org.springframework.web.bind.annotation.RestController" />
+    <list size="9">
+      <item index="0" class="java.lang.String" itemvalue="org.springframework.beans.factory.annotation.Value" />
+      <item index="1" class="java.lang.String" itemvalue="org.springframework.boot.test.mock.mockito.MockBean" />
+      <item index="2" class="java.lang.String" itemvalue="org.springframework.context.annotation.Bean" />
+      <item index="3" class="java.lang.String" itemvalue="org.springframework.core.annotation.AliasFor" />
+      <item index="4" class="java.lang.String" itemvalue="org.springframework.stereotype.Service" />
+      <item index="5" class="java.lang.String" itemvalue="org.springframework.web.bind.annotation.ExceptionHandler" />
+      <item index="6" class="java.lang.String" itemvalue="org.springframework.web.bind.annotation.PostMapping" />
+      <item index="7" class="java.lang.String" itemvalue="org.springframework.web.bind.annotation.PostMapping" />
+      <item index="8" class="java.lang.String" itemvalue="org.springframework.web.bind.annotation.RestController" />
     </list>
+    <pattern value="com.epam.library.util.*" method="value" />
     <writeAnnotations>
       <writeAnnotation name="org.springframework.beans.factory.annotation.Autowired" />
       <writeAnnotation name="org.springframework.boot.test.mock.mockito.MockBean" />
