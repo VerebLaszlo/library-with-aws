@@ -16,7 +16,9 @@ resource aws_route_table route-table {
   )
 }
 
-data aws_availability_zones all {}
+data aws_availability_zones all {
+  state = "available"
+}
 
 # Depends on autoscaled instances
 resource aws_subnet subnet {

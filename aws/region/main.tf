@@ -1,9 +1,4 @@
 /* Container module for all of the network resources within a region. This is instantiated once per region. */
-module iam {
-  source = "./iam"
-  tags = var.tags
-}
-
 module vpc {
   source = "./vpc"
   project-name = var.project-name
@@ -37,6 +32,6 @@ module auto-scaling {
   cloudfront-domain-name = var.cloudfront-domain-name
   subnet-ids = module.vpc.private-subnet-ids
   dep-target-group = module.load-balancer.dep-target-group
-  ec2-instance-profile = module.iam.ec2-instance-profile-name
-  accessArtifactInS3-policy = module.iam.accessArtifactInS3-policy
+  ec2-instance-profile = var.ec2-instance-profile-name
+  accessArtifactInS3-policy = var.accessArtifactInS3-policy
 }

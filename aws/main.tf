@@ -1,4 +1,9 @@
 # Library AWS resources
+module iam {
+  source = "./iam"
+  tags = var.tags
+}
+
 resource aws_s3_bucket library-learning {
   bucket = "library-learning"
   region = var.region
@@ -103,6 +108,8 @@ module us-east-1 {
   access-ip = var.access-ip
   s3-bucket-name = aws_s3_bucket.library-learning.bucket
   cloudfront-domain-name = aws_cloudfront_distribution.cfd-images.domain_name
+  accessArtifactInS3-policy = module.iam.accessArtifactInS3-policy
+  ec2-instance-profile-name = module.iam.ec2-instance-profile-name
 
   providers = {
     aws = aws.us-east-1

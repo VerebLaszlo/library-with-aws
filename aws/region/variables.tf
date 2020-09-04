@@ -25,3 +25,7 @@ variable instance-type {}
 variable s3-bucket-name {}
 
 variable cloudfront-domain-name {}
+
+variable ec2-instance-profile-name {}
+
+variable accessArtifactInS3-policy {}
