@@ -94,6 +94,14 @@ resource aws_s3_bucket_object run-library {
   tags = var.tags
 }
 
+resource aws_route53_zone primary {
+  name = var.domain-name
+  comment = "Access all library endpoints."
+  force_destroy = true
+
+  tags = var.tags
+}
+
 module us-east-1 {
   source = "./region"
   project-name = var.project-name
@@ -111,6 +119,9 @@ module us-east-1 {
   cloudfront-domain-name = aws_cloudfront_distribution.cfd-images.domain_name
   accessArtifactInS3-policy = module.iam.accessArtifactInS3-policy
   ec2-instance-profile-name = module.iam.ec2-instance-profile-name
+  zone-id = aws_route53_zone.primary.zone_id
+  domain-name = var.domain-name
+  route-policy-weight = 100
 
   providers = {
     aws = aws.us-east-1

@@ -8,6 +8,7 @@ tags = {
 }
 
 # configuration arguments
+domain-name = "library-epam.tk"
 instance-type = "t2.micro"
 image-owners = ["amazon"]
 image-name-prefixes = ["amzn2-ami-hvm*"]

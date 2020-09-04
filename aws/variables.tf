@@ -9,6 +9,10 @@ variable tags {
 }
 
 # configuration parameters
+variable domain-name {
+  description = "Access library here."
+}
+
 variable region {
   description = "The main region"
   default = "us-east-1"

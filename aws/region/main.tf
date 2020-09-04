@@ -36,3 +36,20 @@ module auto-scaling {
   ec2-instance-profile = var.ec2-instance-profile-name
   accessArtifactInS3-policy = var.accessArtifactInS3-policy
 }
+
+resource aws_route53_record r53r-library {
+  zone_id = var.zone-id
+  name = "www.${var.domain-name}"
+  type = "A"
+
+  weighted_routing_policy {
+    weight = var.route-policy-weight
+  }
+
+  set_identifier = var.region
+  alias {
+    evaluate_target_health = true
+    name = module.load-balancer.url
+    zone_id = module.load-balancer.zone-id
+  }
+}

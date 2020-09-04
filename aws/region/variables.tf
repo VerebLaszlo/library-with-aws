@@ -31,3 +31,9 @@ variable cloudfront-domain-name {}
 variable ec2-instance-profile-name {}
 
 variable accessArtifactInS3-policy {}
+
+variable zone-id {}
+
+variable domain-name {}
+
+variable route-policy-weight {}
