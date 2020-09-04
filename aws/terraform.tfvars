@@ -9,7 +9,8 @@ tags = {
 
 # configuration arguments
 instance-type = "t2.micro"
-image-id = "ami-08f3d892de259504d"
+image-owners = ["amazon"]
+image-name-prefixes = ["amzn2-ami-hvm*"]
 vpc-cidr = "10.0.0.0/16"
 public-cidrs = [
   "10.0.1.0/24",

@@ -18,7 +18,9 @@ variable private-cidrs { type = list(string) }
 
 variable access-ip {}
 
-variable image-id {}
+variable image-owners {}
+
+variable image-name-prefixes {}
 
 variable instance-type {}
 

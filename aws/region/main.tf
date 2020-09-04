@@ -26,7 +26,8 @@ module auto-scaling {
   tags = var.tags
 
   vpc-id = module.vpc.id
-  image-id = var.image-id
+  image-owners = var.image-owners
+  image-name-prefixes = var.image-name-prefixes
   instance-type = var.instance-type
   s3-bucket-name = var.s3-bucket-name
   cloudfront-domain-name = var.cloudfront-domain-name

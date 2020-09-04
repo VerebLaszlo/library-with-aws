@@ -101,7 +101,8 @@ module us-east-1 {
 
   region = "us-east-1"
   instance-type = var.instance-type
-  image-id = var.image-id
+  image-owners = var.image-owners
+  image-name-prefixes = var.image-name-prefixes
   vpc-cidr = var.vpc-cidr
   public-cidrs = var.public-cidrs
   private-cidrs = var.private-cidrs

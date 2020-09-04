@@ -62,9 +62,19 @@ resource aws_security_group_rule outbound_all {
 }
 //endregion
 
+data aws_ami ami {
+  owners           = var.image-owners
+  most_recent      = true
+
+  filter {
+    name   = "name"
+    values = var.image-name-prefixes
+  }
+}
+
 resource aws_launch_configuration lc-main {
   name_prefix = local.lc-name
-  image_id = var.image-id
+  image_id = data.aws_ami.ami.image_id
   instance_type = var.instance-type
   key_name = aws_key_pair.library.id
   iam_instance_profile = var.ec2-instance-profile

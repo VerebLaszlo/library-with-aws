@@ -10,7 +10,9 @@ variable s3-bucket-name {}
 
 variable cloudfront-domain-name {}
 
-variable image-id {}
+variable image-owners {}
+
+variable image-name-prefixes {}
 
 variable instance-type {}
 

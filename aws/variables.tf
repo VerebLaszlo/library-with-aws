@@ -19,8 +19,12 @@ variable instance-type {
   default = "t2.micro"
 }
 
-variable image-id {
-  description = "Image id to use on the instance"
+variable image-owners {
+  description = "List of image owners, like AWS account ID, self, AWS owner alias, e.g. amazon"
+}
+
+variable image-name-prefixes {
+  description = "List of image name prefixes"
 }
 
 variable vpc-cidr {}
