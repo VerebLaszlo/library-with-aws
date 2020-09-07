@@ -6,7 +6,6 @@ module iam {
 
 resource aws_s3_bucket library-learning {
   bucket = "library-learning"
-  region = var.region
   force_destroy = true
   versioning {
     enabled = true

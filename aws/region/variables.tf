@@ -1,7 +1,3 @@
-provider template {
-  version = "~>2.1"
-}
-
 # script parameters
 variable project-name {}
 
