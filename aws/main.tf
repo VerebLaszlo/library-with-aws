@@ -128,24 +128,28 @@ module us-east-1 {
   }
 }
 
-/*
 module us-west-2 {
   source = "./region"
-  project_name = var.project_name
+  project-name = var.project-name
   tags = var.tags
 
   region = "us-west-2"
-  instance_type = var.instance_type
-  ami_owner_ids = var.ami_owner_ids
-  ami_name_filter = var.ami_name_filter
-  vpc_cidr = var.vpc_cidr
-  public_cidrs = var.public_cidrs
-  private_cidrs = var.private_cidrs
-  access_ip = var.access_ip
+  instance-type = var.instance-type
+  image-owners = var.image-owners
+  image-name-prefixes = var.image-name-prefixes
+  vpc-cidr = var.vpc-cidr
+  public-cidrs = var.public-cidrs
+  private-cidrs = var.private-cidrs
+  access-ip = var.access-ip
+  s3-bucket-name = aws_s3_bucket.library-learning.bucket
+  cloudfront-domain-name = aws_cloudfront_distribution.cfd-images.domain_name
+  accessArtifactInS3-policy = module.iam.accessArtifactInS3-policy
+  ec2-instance-profile-name = module.iam.ec2-instance-profile-name
+  zone-id = aws_route53_zone.primary.zone_id
+  domain-name = var.domain-name
+  route-policy-weight = 100
 
   providers = {
     aws = aws.us-west-2
   }
 }
-*/
-

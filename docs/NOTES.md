@@ -49,3 +49,20 @@ resource aws_launch_template library-launch-template {
   tags = var.tags
 }
 ```
+
+
+## Free domain
+1. Go to [FreeNom](freenom.com) and register for an account.
+2. AWS
+    1. Log into your AWS account, go to Route53 and create a hosted zone for your domain and set the type to Public
+  Hosted Zone
+    2. Once created, you’ll be presented with 2 default record sets for your domain. In here, take note all of the 4
+  Nameservers.
+    3. Create another record sets for your domain, one with www name and one without it.
+3. FreeNom
+    1. Go to **Services**/**My Domains**
+    2. Click **Manage Domain ![](https://findicons.com/files/icons/1620/crystal_project/16/gear.png)**
+    3. Go to **Management Tools**/**Nameservers**
+    4. Select custom nameservers and copy the nameservers from the new hosted zone in AWS Route53
+
+source: https://medium.com/@kcabading/getting-a-free-domain-for-your-ec2-instance-3ac2955b0a2f

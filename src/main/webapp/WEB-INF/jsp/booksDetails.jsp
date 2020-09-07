@@ -3,7 +3,7 @@
 <html lang=en>
 <head>
     <title>Welcome</title>
-    <link href="css/main.css" rel="stylesheet">
+    <link href="css/main.css?ver=1.0" rel="stylesheet">
 </head>
 <body>
     <div class="container">
@@ -30,9 +30,14 @@
                       </tr>
                     </table>
                 </div>
-                <hr>
             </div>
+            <hr>
         </c:forEach>
     </div>
+    <footer>
+        <div class="footer">
+            <p>${awsRegion}</p>
+        </div>
+    </footer>
     <script src="js/main.js"></script>
 </body>

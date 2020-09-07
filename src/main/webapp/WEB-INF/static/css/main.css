@@ -1,5 +1,5 @@
 body {
-    background-color: lightblue;
+  background-color: lightblue;
 }
 
 .row {
@@ -20,16 +20,9 @@ img {
 table {
     text-align: left;
 }
-/*
-.column {
-  float: left;
-  width: 33.33%;
-  padding: 5px;
-}
 
-.row::after {
-  content: "";
-  clear: both;
-  display: table;
+.footer {
+  color: grey;
+  text-align: center;
+  width: 100%;
 }
-*/

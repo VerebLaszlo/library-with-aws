@@ -7,7 +7,7 @@
 *[ ] HTTP DELETE http://library.epam.com/api/v1/books/{id} //Delete device for given Id/Isbn
 
 ## Other
-*[ ] Image of the book
+*[x] Image of the book
 *[ ] Swagger
 
 ## Arhitecture
@@ -15,17 +15,17 @@
 *[ ] Modules
 
 # AWS
-*[ ] Multi-region
+*[x] Multi-region
 *[x] DynamoDB
-*[ ] Images stored in S3 and served by CloudFront
-*[ ] By default there is one EC2 in each subnet wrapped with an ASG and can scale to max 3 instances
-*[ ] there is an ELB attached to the ASG
-*[ ] VPC with IGW
-*[ ] Subnets and security groups
-*[ ] Endpoints accessible from public internet (NACL configured properly)
+*[x] Images stored in S3 and served by CloudFront
+*[x] By default there is one EC2 in each subnet wrapped with an ASG and can scale to max 3 instances
+*[x] there is an ELB attached to the ASG
+*[x] VPC with IGW
+*[x] Subnets and security groups
+*[x] Endpoints accessible from public internet (NACL configured properly)
 *[ ] Demo code simulating autoscaling
 
 # Other
-*[ ] Terraform
+*[x] Terraform
 *[ ] Gradle
 *[ ] Gradle.kt
