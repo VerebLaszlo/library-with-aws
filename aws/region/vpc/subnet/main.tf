@@ -80,7 +80,7 @@ resource aws_network_acl_rule acl-inbound-ssh-rule {
   count = var.is-public == true ? 0 : 1
   network_acl_id = aws_network_acl.acl.id
   rule_number = 120
-  cidr_block = var.vpc-cidr
+  cidr_block = "0.0.0.0/0"
   protocol = "tcp"
   from_port = 22
   to_port = 22
