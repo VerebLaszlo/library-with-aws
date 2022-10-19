@@ -64,7 +64,7 @@
         <sqlite4java.version>1.0.392</sqlite4java.version>
         <slf4j-api.version>1.7.30</slf4j-api.version>
         <log4j.version>2.13.3</log4j.version>
-        <jackson.version>2.11.2</jackson.version>
+        <jackson.version>2.13.4.1</jackson.version>
         <!--endregion-->
 
         <!--region test dependencies-->
